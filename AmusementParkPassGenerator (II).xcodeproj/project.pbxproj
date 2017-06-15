@@ -12,7 +12,10 @@
 		97DE2CF11EF2E3C20066EBA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97DE2CEF1EF2E3C20066EBA8 /* Main.storyboard */; };
 		97DE2CF31EF2E3C20066EBA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97DE2CF21EF2E3C20066EBA8 /* Assets.xcassets */; };
 		97DE2CF61EF2E3C20066EBA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97DE2CF41EF2E3C20066EBA8 /* LaunchScreen.storyboard */; };
-		97DE2D011EF2E3C20066EBA8 /* AmusementParkPassGenerator__II_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2D001EF2E3C20066EBA8 /* AmusementParkPassGenerator__II_Tests.swift */; };
+		97DE2D0C1EF2E4880066EBA8 /* PassGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2D0B1EF2E4880066EBA8 /* PassGenerator.swift */; };
+		97DE2D0E1EF2E4B00066EBA8 /* AmusementParkPassGenerator__II_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2D0D1EF2E4B00066EBA8 /* AmusementParkPassGenerator__II_Tests.swift */; };
+		97DE2D121EF2E56C0066EBA8 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2D111EF2E56C0066EBA8 /* README.md */; };
+		97DE2D141EF2E6260066EBA8 /* PlugValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2D131EF2E6260066EBA8 /* PlugValues.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,8 +37,11 @@
 		97DE2CF51EF2E3C20066EBA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97DE2CF71EF2E3C20066EBA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		97DE2CFC1EF2E3C20066EBA8 /* AmusementParkPassGenerator (II)Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AmusementParkPassGenerator (II)Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		97DE2D001EF2E3C20066EBA8 /* AmusementParkPassGenerator__II_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmusementParkPassGenerator__II_Tests.swift; sourceTree = "<group>"; };
 		97DE2D021EF2E3C20066EBA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		97DE2D0B1EF2E4880066EBA8 /* PassGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassGenerator.swift; sourceTree = "<group>"; };
+		97DE2D0D1EF2E4B00066EBA8 /* AmusementParkPassGenerator__II_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmusementParkPassGenerator__II_Tests.swift; sourceTree = "<group>"; };
+		97DE2D111EF2E56C0066EBA8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		97DE2D131EF2E6260066EBA8 /* PlugValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlugValues.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +83,8 @@
 		97DE2CEA1EF2E3C20066EBA8 /* AmusementParkPassGenerator (II) */ = {
 			isa = PBXGroup;
 			children = (
+				97DE2D111EF2E56C0066EBA8 /* README.md */,
+				97DE2D0B1EF2E4880066EBA8 /* PassGenerator.swift */,
 				97DE2CEB1EF2E3C20066EBA8 /* AppDelegate.swift */,
 				97DE2CED1EF2E3C20066EBA8 /* ViewController.swift */,
 				97DE2CEF1EF2E3C20066EBA8 /* Main.storyboard */,
@@ -90,7 +98,8 @@
 		97DE2CFF1EF2E3C20066EBA8 /* AmusementParkPassGenerator (II)Tests */ = {
 			isa = PBXGroup;
 			children = (
-				97DE2D001EF2E3C20066EBA8 /* AmusementParkPassGenerator__II_Tests.swift */,
+				97DE2D131EF2E6260066EBA8 /* PlugValues.swift */,
+				97DE2D0D1EF2E4B00066EBA8 /* AmusementParkPassGenerator__II_Tests.swift */,
 				97DE2D021EF2E3C20066EBA8 /* Info.plist */,
 			);
 			path = "AmusementParkPassGenerator (II)Tests";
@@ -202,6 +211,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				97DE2CEE1EF2E3C20066EBA8 /* ViewController.swift in Sources */,
+				97DE2D0C1EF2E4880066EBA8 /* PassGenerator.swift in Sources */,
+				97DE2D121EF2E56C0066EBA8 /* README.md in Sources */,
 				97DE2CEC1EF2E3C20066EBA8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -210,7 +221,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				97DE2D011EF2E3C20066EBA8 /* AmusementParkPassGenerator__II_Tests.swift in Sources */,
+				97DE2D0E1EF2E4B00066EBA8 /* AmusementParkPassGenerator__II_Tests.swift in Sources */,
+				97DE2D141EF2E6260066EBA8 /* PlugValues.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  AmusementParkPassGenerator (II)
+//  AmusementParkPassGenerator
 //
-//  Created by Leticia Rodriguez on 6/15/17.
+//  Created by Leticia Rodriguez on 5/21/17.
 //  Copyright © 2017 Leticia Rodriguez. All rights reserved.
 //
 
