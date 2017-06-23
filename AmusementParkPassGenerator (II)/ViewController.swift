@@ -9,13 +9,69 @@
 import UIKit
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController  {
+    
+    // Colors
+    
+    let textColorDisabledLabel = UIColor(red:0.64, green:0.62, blue:0.65, alpha:1.0)
+    let textColorEnabledLabel = UIColor(red:0.25, green:0.21, blue:0.28, alpha:1.0)
+    let borderColorDisabledView = UIColor(red:196/255.0, green:192/255.0, blue:199/255.0, alpha: 1.0)
+    let borderColorDisabledTextField = UIColor(red:0.64, green:0.62, blue:0.65, alpha:1.0)
+    let backgroundColorDisabledTextField = UIColor(red:0.86, green:0.84, blue:0.87, alpha:1.0)
+    let borderColorEnabledTextField = UIColor(red:63/255.0, green:54/255.0, blue:71/255.0, alpha: 1.0)
+    let titleColorEnabledButton = UIColor(red:0.35, green:0.58, blue:0.56, alpha:1.0)
+    
+    @IBOutlet weak var submenuStackView: UIStackView!
+    
+    @IBOutlet var uiViewCollection: [UIView]!{
+         didSet {
+            
+            uiViewCollection.forEach{
+                $0.layer.borderWidth = 1
+                $0.layer.borderColor = borderColorDisabledView.cgColor
+                $0.isUserInteractionEnabled = false           }
+         }
+    }
     
     
-var guest = Guest()
-   
+    @IBOutlet var textFieldCollection: [UITextField]!{
+        didSet {
+           
+            textFieldCollection.forEach{
+                $0.layer.borderWidth = 1
+                $0.layer.borderColor = borderColorDisabledTextField.cgColor
+                $0.layer.cornerRadius = 5
+                $0.backgroundColor = backgroundColorDisabledTextField
+            }
+
+        }
+    }
+    
+    
+    @IBOutlet var labelCollection: [UILabel]!{
+        didSet{
+            
+            labelCollection.forEach {
+                $0.textColor = textColorDisabledLabel
+            }
+        }
+    }
+    
+    
+    @IBOutlet weak var generatePassButton: UIButton!
+    
+    @IBOutlet weak var populateDataButton: UIButton!
+    
+    var guest = Guest()
+    var uiComponents = UIComponents()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        uiComponents.createInterfaceButtons()
+        initViews()
+        disableButtons()
         // Do any additional setup after loading the view, typically from a nib.
         
         // UNCOMMENT the following block to test feature to prevent a guest from swiping into the same ride twice in row within 5 seconds
@@ -68,6 +124,225 @@ var guest = Guest()
                                                             print("Permission for first swipe: \(description) \(message)")}
             }
         }
+    }
+    
+    
+    @IBAction func guestButtonPressed(_ sender: Any) {
+        
+        enableViewsInStackView(uiComponents.guestButtonsArray)
+        disableViewsInStackView(uiComponents.employeeButtonsArray)
+        disableViewsInStackView(uiComponents.managerButtonsArray)
+        disableViewsInStackView(uiComponents.vendorButtonsArray)
+        disableViewsInStackView(uiComponents.contractorButtonsArray)
+        disabledForm()
+    }
+    
+    @IBAction func employeeButtonPressed(_ sender: Any) {
+        
+        enableViewsInStackView(uiComponents.employeeButtonsArray)
+        disableViewsInStackView(uiComponents.guestButtonsArray)
+        disableViewsInStackView(uiComponents.managerButtonsArray)
+        disableViewsInStackView(uiComponents.vendorButtonsArray)
+        disableViewsInStackView(uiComponents.contractorButtonsArray)
+        disabledForm()
+    }
+    
+    @IBAction func managerButtonPressed(_ sender: Any) {
+        
+        enableViewsInStackView(uiComponents.managerButtonsArray)
+        disableViewsInStackView(uiComponents.employeeButtonsArray)
+        disableViewsInStackView(uiComponents.guestButtonsArray)
+        disableViewsInStackView(uiComponents.vendorButtonsArray)
+        disableViewsInStackView(uiComponents.contractorButtonsArray)
+        disabledForm()
+    }
+    
+    
+    @IBAction func contractorButtonPressed(_ sender: Any) {
+        
+        enableViewsInStackView(uiComponents.contractorButtonsArray)
+        disableViewsInStackView(uiComponents.managerButtonsArray)
+        disableViewsInStackView(uiComponents.employeeButtonsArray)
+        disableViewsInStackView(uiComponents.guestButtonsArray)
+        disableViewsInStackView(uiComponents.vendorButtonsArray)
+        disabledForm()
+    }
+    
+    @IBAction func vendorButtonPressed(_ sender: Any) {
+        
+        enableViewsInStackView(uiComponents.vendorButtonsArray)
+        disableViewsInStackView(uiComponents.contractorButtonsArray)
+        disableViewsInStackView(uiComponents.managerButtonsArray)
+        disableViewsInStackView(uiComponents.employeeButtonsArray)
+        disableViewsInStackView(uiComponents.guestButtonsArray)
+        disabledForm()
+    }
+    
+    //
+    func buttonClicked(sender: UIButton)
+    {
+        switch sender.tag {
+        case 0: // Child option was tapped
+            print("Child")
+            enableForm()
+        case 1: // Classic option was tapped
+            print("classic")
+            enableForm()
+        case 2: // Senior option was tapped
+            print("Senior")
+            enableForm()
+        case 3: // VIP option was tapped
+            print("VIP")
+            enableForm()
+        case 4: // Seasson Pass option was tapped
+            print("seasson pass")
+            enableForm()
+        case 5: // Food Employee option was tapped
+            print("food")
+            enableForm()
+        case 6: // Ride Employee option was tapped
+            print("ride")
+            enableForm()
+        case 7: // Maintenance Employee option was tapped
+            print("maintenance")
+            enableForm()
+        case 8: // Senior Manager option was tapped
+            print("senior ")
+            enableForm()
+        case 9: // General Manager option was tapped
+            print("general")
+            enableForm()
+        case 10: // Assistant option was tapped
+            print("asssistant")
+            enableForm()
+        case 11: // Contractor option was tapped
+            print("contractor")
+            enableForm()
+        case 12: // Vendor option was tapped
+            print("vendor")
+            enableVendorForm()
+        default:
+            print("default")
+        }
+        
+    }
+
+    // MARK: Helper Methods
+    
+    //
+    func addSubViewToStackView(_ array: [UIButton]){
+        for button in array {
+            submenuStackView.addArrangedSubview(button)
+        }
+    }
+    
+    //
+    func enableViewsInStackView(_ array: [UIButton]){
+        for button in array {
+            button.isHidden = false
+            button.isEnabled = true
+        }
+    }
+    
+    //
+    func disableViewsInStackView(_ array: [UIButton]){
+        for button in array {
+            button.isHidden = true
+            button.isEnabled = false
+        }
+    }
+    
+    //
+    func initViews(){
+        addSubViewToStackView(uiComponents.guestButtonsArray)
+        addSubViewToStackView(uiComponents.employeeButtonsArray)
+        addSubViewToStackView(uiComponents.managerButtonsArray)
+        addSubViewToStackView(uiComponents.contractorButtonsArray)
+        addSubViewToStackView(uiComponents.vendorButtonsArray)
+        disableViewsInStackView(uiComponents.guestButtonsArray)
+        disableViewsInStackView(uiComponents.employeeButtonsArray)
+        disableViewsInStackView(uiComponents.managerButtonsArray)
+        disableViewsInStackView(uiComponents.contractorButtonsArray)
+        disableViewsInStackView(uiComponents.vendorButtonsArray)
+        addTarget()
+    }
+    
+    func addTarget() {
+        var indexTag = 0
+        for button in uiComponents.buttonsArray{
+            button.tag = indexTag
+            indexTag += 1
+            button.addTarget(self, action: #selector(buttonClicked(sender:)), for:.touchUpInside)
+        }
+    }
+    
+    func disabledForm(){
+    
+        uiViewCollection.forEach{
+            $0.isUserInteractionEnabled = false
+        }
+
+        textFieldCollection.forEach{
+            $0.layer.borderColor = borderColorDisabledTextField.cgColor
+            $0.backgroundColor = backgroundColorDisabledTextField
+        }
+        
+        labelCollection.forEach {
+            $0.textColor = textColorDisabledLabel
+        }
+        
+        disableButtons()
+        submenuStackView.isUserInteractionEnabled = true
+
+    }
+    
+    func disableButtons(){
+        generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+        populateDataButton.setTitleColor(textColorDisabledLabel, for: .normal)
+    }
+    
+    func enableForm(){
+        for textField in textFieldCollection{
+            if textField.tag != 2 && textField.tag != 3 && textField.tag != 6 {
+                textField.backgroundColor = .white
+                textField.layer.borderColor = borderColorEnabledTextField.cgColor
+            }
+        }
+        
+        for label in labelCollection{
+            if label.text != "SSN" && label.text != "Project #" && label.text != "Company" {
+                label.textColor = textColorEnabledLabel
+            }
+        }
+        
+        for uiview in uiViewCollection {
+            uiview.isUserInteractionEnabled = true
+        }
+        generatePassButton.setTitleColor(.white, for: .normal)
+        populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
+        
+        submenuStackView.isUserInteractionEnabled = false
+    }
+
+    func enableVendorForm(){
+        for textField in textFieldCollection{
+            if textField.tag != 2 && textField.tag != 3 {
+                textField.backgroundColor = .white
+                textField.layer.borderColor = borderColorEnabledTextField.cgColor
+            }
+        }
+        
+        for label in labelCollection{
+            if label.text != "SSN" && label.text != "Project #" {
+                label.textColor = textColorEnabledLabel
+            }
+        }
+        
+        for uiview in uiViewCollection {
+            uiview.isUserInteractionEnabled = true
+        }
+        generatePassButton.setTitleColor(.white, for: .normal)
+        populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
     }
 
 }

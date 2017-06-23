@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		97A7EC9B1EFC3DCC00E3FB70 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */; };
 		97DE2CEC1EF2E3C20066EBA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2CEB1EF2E3C20066EBA8 /* AppDelegate.swift */; };
 		97DE2CEE1EF2E3C20066EBA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2CED1EF2E3C20066EBA8 /* ViewController.swift */; };
 		97DE2CF11EF2E3C20066EBA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97DE2CEF1EF2E3C20066EBA8 /* Main.storyboard */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIComponents.swift; sourceTree = "<group>"; };
 		97DE2CE81EF2E3C20066EBA8 /* AmusementParkPassGenerator (II).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AmusementParkPassGenerator (II).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97DE2CEB1EF2E3C20066EBA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		97DE2CED1EF2E3C20066EBA8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				97DE2CF21EF2E3C20066EBA8 /* Assets.xcassets */,
 				97DE2CF41EF2E3C20066EBA8 /* LaunchScreen.storyboard */,
 				97DE2CF71EF2E3C20066EBA8 /* Info.plist */,
+				97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */,
 			);
 			path = "AmusementParkPassGenerator (II)";
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 				97DE2CEE1EF2E3C20066EBA8 /* ViewController.swift in Sources */,
 				97DE2D0C1EF2E4880066EBA8 /* PassGenerator.swift in Sources */,
 				97DE2D121EF2E56C0066EBA8 /* README.md in Sources */,
+				97A7EC9B1EFC3DCC00E3FB70 /* UIComponents.swift in Sources */,
 				97DE2CEC1EF2E3C20066EBA8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,6 +363,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Let-Rod.AmusementParkPassGenerator--II-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -372,6 +377,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Let-Rod.AmusementParkPassGenerator--II-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
