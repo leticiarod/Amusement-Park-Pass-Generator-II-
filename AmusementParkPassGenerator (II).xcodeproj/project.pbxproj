@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		970ABFE21EFE3A6300ED4D0C /* PlugValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970ABFE11EFE3A6300ED4D0C /* PlugValues.swift */; };
 		97A7EC9B1EFC3DCC00E3FB70 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */; };
 		97DE2CEC1EF2E3C20066EBA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2CEB1EF2E3C20066EBA8 /* AppDelegate.swift */; };
 		97DE2CEE1EF2E3C20066EBA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2CED1EF2E3C20066EBA8 /* ViewController.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		970ABFE11EFE3A6300ED4D0C /* PlugValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlugValues.swift; sourceTree = "<group>"; };
 		97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIComponents.swift; sourceTree = "<group>"; };
 		97DE2CE81EF2E3C20066EBA8 /* AmusementParkPassGenerator (II).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AmusementParkPassGenerator (II).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97DE2CEB1EF2E3C20066EBA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				97DE2CF41EF2E3C20066EBA8 /* LaunchScreen.storyboard */,
 				97DE2CF71EF2E3C20066EBA8 /* Info.plist */,
 				97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */,
+				970ABFE11EFE3A6300ED4D0C /* PlugValues.swift */,
 			);
 			path = "AmusementParkPassGenerator (II)";
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97DE2CEE1EF2E3C20066EBA8 /* ViewController.swift in Sources */,
+				970ABFE21EFE3A6300ED4D0C /* PlugValues.swift in Sources */,
 				97DE2D0C1EF2E4880066EBA8 /* PassGenerator.swift in Sources */,
 				97DE2D121EF2E56C0066EBA8 /* README.md in Sources */,
 				97A7EC9B1EFC3DCC00E3FB70 /* UIComponents.swift in Sources */,

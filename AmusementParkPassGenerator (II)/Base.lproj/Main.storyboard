@@ -421,6 +421,9 @@
                                                                         <integer key="value" value="5"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="populateDataButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zks-7V-hWr"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                     </stackView>

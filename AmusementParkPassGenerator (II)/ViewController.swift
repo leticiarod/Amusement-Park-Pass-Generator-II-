@@ -65,6 +65,7 @@ class ViewController: UIViewController  {
     var guest = Guest()
     var uiComponents = UIComponents()
     
+    var subEntrantTypeSelected = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,49 +179,135 @@ class ViewController: UIViewController  {
         disabledForm()
     }
     
+    
+    @IBAction func populateDataButtonPressed(_ sender: Any) {
+        
+        let entrants = Entrants()
+        let entrantByType = entrants.getEntrantByType(subEntrantTypeSelected)
+        var index = 0
+        var textField = UITextField()
+        var dateOfBirth: String = ""
+        
+        // Convert date to string
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-mm-yyyy" //Your New Date format as per requirement change it own
+        if let d = entrantByType.dateOfBirth {
+         dateOfBirth = dateFormatter.string(from: d) //pass Date here
+        }
+        
+        // Date of Birth
+        textField = textFieldCollection[index]
+        textField.text = dateOfBirth
+        index += 1
+        // SSN
+        textField = textFieldCollection[index]
+        textField.text = entrantByType.socialSecurityNumber
+        index += 1
+        // Project
+        /* textField = textFieldCollection[index]
+        textField.text = entrantByType.
+         */
+        index += 1
+        // First Name
+        textField = textFieldCollection[index]
+        textField.text = entrantByType.firstName
+        index += 1
+        // Last Name
+        textField = textFieldCollection[index]
+        textField.text = entrantByType.lastName
+        index += 1
+        // Company
+        /* textField = textFieldCollection[index]
+        textField.text = entrantByType.
+        */
+        index += 1
+        // Street Address
+        textField = textFieldCollection[index]
+        textField.text = entrantByType.streetAddress
+        index += 1
+        // City
+        textField = textFieldCollection[index]
+        textField.text = entrantByType.city
+        index += 1
+        // State
+        textField = textFieldCollection[index]
+        textField.text = entrantByType.state
+        index += 1
+        // Zip Code
+        textField = textFieldCollection[index]
+        textField.text = entrantByType.zipCode
+        index += 1
+    }
+    
     //
     func buttonClicked(sender: UIButton)
     {
         switch sender.tag {
         case 0: // Child option was tapped
-            print("Child")
-            enableForm()
+                print("Child")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "Child"
         case 1: // Classic option was tapped
-            print("classic")
-            enableForm()
+                print("classic")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "Classic"
         case 2: // Senior option was tapped
-            print("Senior")
-            enableForm()
+                print("Senior")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "SeniorGuest"
         case 3: // VIP option was tapped
-            print("VIP")
-            enableForm()
+                print("VIP")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "VIP"
         case 4: // Seasson Pass option was tapped
-            print("seasson pass")
-            enableForm()
+                print("seasson pass")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "SeassonPass"
         case 5: // Food Employee option was tapped
-            print("food")
-            enableForm()
+                print("food")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "Food"
         case 6: // Ride Employee option was tapped
-            print("ride")
-            enableForm()
+                print("ride")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "Ride"
         case 7: // Maintenance Employee option was tapped
-            print("maintenance")
-            enableForm()
+                print("maintenance")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "Maintenance"
         case 8: // Senior Manager option was tapped
-            print("senior ")
-            enableForm()
+                print("senior ")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "SeniorManager"
         case 9: // General Manager option was tapped
-            print("general")
-            enableForm()
+                print("general")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "General"
         case 10: // Assistant option was tapped
-            print("asssistant")
-            enableForm()
+                print("asssistant")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "Assistant"
         case 11: // Contractor option was tapped
-            print("contractor")
-            enableForm()
+                print("contractor")
+                cleanTextFields()
+                enableForm()
+                subEntrantTypeSelected = "Contractor"
         case 12: // Vendor option was tapped
-            print("vendor")
-            enableVendorForm()
+                print("vendor")
+                cleanTextFields()
+                enableVendorForm()
+                subEntrantTypeSelected = "Vendor"
         default:
             print("default")
         }
@@ -285,6 +372,7 @@ class ViewController: UIViewController  {
         textFieldCollection.forEach{
             $0.layer.borderColor = borderColorDisabledTextField.cgColor
             $0.backgroundColor = backgroundColorDisabledTextField
+            $0.text = ""
         }
         
         labelCollection.forEach {
@@ -321,7 +409,7 @@ class ViewController: UIViewController  {
         generatePassButton.setTitleColor(.white, for: .normal)
         populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
         
-        submenuStackView.isUserInteractionEnabled = false
+       // submenuStackView.isUserInteractionEnabled = false
     }
 
     func enableVendorForm(){
@@ -343,6 +431,14 @@ class ViewController: UIViewController  {
         }
         generatePassButton.setTitleColor(.white, for: .normal)
         populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
+        
+      //  submenuStackView.isUserInteractionEnabled = false
+    }
+    
+    func cleanTextFields(){
+        textFieldCollection.forEach{
+           $0.text = ""
+        }
     }
 
 }

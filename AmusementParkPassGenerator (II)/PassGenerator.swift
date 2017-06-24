@@ -18,6 +18,8 @@ enum GuestType {
     case classic
     case vip
     case freeChild
+    case senior
+    case seassonPass
 }
 
 enum EmployeeType {
@@ -71,6 +73,8 @@ enum DiscountAccess {
 
 enum EntrantDataError: Error {
     case missingBirthday(description: String)
+    case missingDateOfVisit(description: String)
+    case missingVendorCompany(description: String)
     case missingName(description: String)
     case missingLastName(description: String)
     case missingStreetAddress(description: String)
@@ -302,6 +306,83 @@ class HourlyEmployee: Employee, Accessable, Swipeable {
 
 }
 
+class ContractEmployee: Employee, Accessable,Swipeable {
+    var access: Access
+    var permission: Permission
+    let projectID: String
+    
+    override init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: Date?, type: EmployeeType) throws {
+        access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
+        permission = .denied(description: "Access Denied", message: nil)
+        self.projectID = ""
+        try super.init(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: socialSecurityNumber, dateOfBirth: dateOfBirth, type: type)
+        
+    }
+    
+    func generateAccessByEntrantType() -> Access {
+        var areaAccessArray: [AreaAccess] = Array()
+        let rideAccessArray: [RideAccess] = Array()
+        let discountAccessArray: [DiscountAccess] = Array()
+        
+        switch self.projectID {
+        case "1001": areaAccessArray.append(contentsOf: [.amusementAreas,.rideControlAreas])
+        case "1002": areaAccessArray.append(contentsOf: [.amusementAreas, .rideControlAreas, .maintenanceAreas])
+            case "1003": areaAccessArray.append(contentsOf: [.amusementAreas, .rideControlAreas, .kitchenAreas, .maintenanceAreas, .officeAreas])
+            case "2001": areaAccessArray.append(contentsOf: [.officeAreas])
+            case "2002": areaAccessArray.append(contentsOf: [.kitchenAreas, .maintenanceAreas])
+        default: break
+        }
+        
+        access = Access(areaAccess: areaAccessArray, rideAccess: rideAccessArray, discountAccess: discountAccessArray)
+        return self.access
+
+    }
+    
+    func swipe() {
+        
+        switch self.projectID {
+        case "1001": if let areaAccessArray = self.access.areaAccess {
+                        if areaAccessArray.contains(AreaAccess.amusementAreas) ||
+                            areaAccessArray.contains(AreaAccess.rideControlAreas) {
+                            self.permission = .granted(description: "Access Granted !", message: "")
+                        }
+                     }
+        case "1002": if let areaAccessArray = self.access.areaAccess {
+                        if areaAccessArray.contains(AreaAccess.amusementAreas) ||
+                            areaAccessArray.contains(AreaAccess.rideControlAreas) ||
+                            areaAccessArray.contains(AreaAccess.maintenanceAreas) {
+                            self.permission = .granted(description: "Access Granted !", message: "")
+                        }
+                    }
+        case "1003": if let areaAccessArray = self.access.areaAccess {
+                        if areaAccessArray.contains(AreaAccess.amusementAreas) ||
+                            areaAccessArray.contains(AreaAccess.rideControlAreas) ||
+                            areaAccessArray.contains(AreaAccess.kitchenAreas) ||
+                            areaAccessArray.contains(AreaAccess.maintenanceAreas) ||
+                            areaAccessArray.contains(AreaAccess.officeAreas) {
+                            self.permission = .granted(description: "Access Granted !", message: "")
+                        }
+                     }
+        case "2001": if let areaAccessArray = self.access.areaAccess {
+                        if areaAccessArray.contains(AreaAccess.officeAreas) {
+                            self.permission = .granted(description: "Access Granted !", message: "")
+                        }
+                     }
+        case "2002": if let areaAccessArray = self.access.areaAccess {
+                        if areaAccessArray.contains(AreaAccess.kitchenAreas) ||
+                            areaAccessArray.contains(AreaAccess.maintenanceAreas){
+                            self.permission = .granted(description: "Access Granted !", message: "")
+                        }
+                     }
+        default: break
+        }
+
+    }
+    
+    
+}
+
+
 class Guest: Accessable, Swipeable {
     
     var access: Access
@@ -350,6 +431,52 @@ class Guest: Accessable, Swipeable {
             
         }
         
+        if type == GuestType.senior {
+            if firstName == "" {
+                throw EntrantDataError.missingName(description: "Senior guest name is required")
+                
+            }
+            
+            if lastName == ""  {
+                throw EntrantDataError.missingLastName(description: "Senior guest lastname is required")
+                
+            }
+            
+            if dateOfBirth == nil {
+                throw EntrantDataError.missingBirthday(description: "Senior guest date of birth is missing")
+            }
+        }
+        
+        if type == GuestType.seassonPass {
+            if firstName == "" {
+                throw EntrantDataError.missingName(description: "Seasson Pass guest name is required")
+                
+            }
+            
+            if lastName == ""  {
+                throw EntrantDataError.missingLastName(description: "Seasson Pass guest lastname is required")
+                
+            }
+            
+            if streetAddress == ""  {
+                throw EntrantDataError.missingStreetAddress(description: "Seasson Pass guest Street Address is required")
+                
+            }
+            if city == ""  {
+                throw EntrantDataError.missingCity(description: "Seasson Pass guest city is required")
+                
+            }
+            if state == ""  {
+                throw EntrantDataError.missingState(description: "Seasson Pass guest state is required")
+                
+            }
+            if zipCode == ""  {
+                throw EntrantDataError.missingZipCode(description: "Seasson Pass guest zipcode is required")
+                
+            }
+
+        }
+        
         self.firstName = firstName
         self.lastName = lastName
         self.streetAddress = streetAddress
@@ -378,6 +505,12 @@ class Guest: Accessable, Swipeable {
         case .freeChild:  areaAccessArray.append(contentsOf: [.amusementAreas])
         rideAccessArray.append(contentsOf: [.allRides])
           
+        case .senior:   areaAccessArray.append(contentsOf: [.amusementAreas])
+                        rideAccessArray.append(contentsOf: [.allRides, .skipAllRideLines])
+                        discountAccessArray.append(contentsOf: [.onFood(percentage: 10), .onMarchandise(percentage: 10)])
+        case .seassonPass: areaAccessArray.append(contentsOf: [.amusementAreas])
+                           rideAccessArray.append(contentsOf: [.allRides, .skipAllRideLines])
+                           discountAccessArray.append(contentsOf: [.onFood(percentage: 10), .onMarchandise(percentage: 20)])
         }
         
         access = Access(areaAccess: areaAccessArray, rideAccess: rideAccessArray, discountAccess: discountAccessArray)
@@ -431,6 +564,18 @@ class Guest: Accessable, Swipeable {
                 if areaAccessArray.contains(AreaAccess.amusementAreas) || rideAccessArray.contains(RideAccess.allRides) {
                     self.permission = .granted(description: "Access Granted !", message: message)
                 }
+            
+            }
+        case .senior: if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                               self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
+            if areaAccessArray.contains(AreaAccess.amusementAreas) || rideAccessArray.contains(RideAccess.allRides) || rideAccessArray.contains(RideAccess.skipAllRideLines) || contains(foodDiscount: 10, marchandiseDiscount: 10, discountAccessArray: discountAccessArray) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            
+            }
+        case .seassonPass: if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                             self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
+            if areaAccessArray.contains(AreaAccess.amusementAreas) || rideAccessArray.contains(RideAccess.allRides) || rideAccessArray.contains(RideAccess.skipAllRideLines) || contains(foodDiscount: 10, marchandiseDiscount: 20, discountAccessArray: discountAccessArray) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
             
             }
     }
@@ -504,6 +649,127 @@ class Guest: Accessable, Swipeable {
 
 }
 
+class Vendor: Accessable, Swipeable {
+    var access: Access
+    
+    let firstName: String?
+    let lastName: String?
+    let streetAddress: String?
+    let city: String?
+    let state: String?
+    let zipCode: String?
+    let socialSecurityNumber: String?
+    let dateOfBirth: Date?
+    let dateOfVisit: Date?
+    let vendorCompany: String
+    var permission: Permission
+    
+    init(){
+        self.firstName = nil
+        self.lastName = nil
+        self.streetAddress = nil
+        self.city = nil
+        self.state = nil
+        self.zipCode = nil
+        self.socialSecurityNumber = nil
+        self.dateOfBirth = nil
+        self.dateOfVisit = nil
+        self.vendorCompany = ""
+        access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
+        permission = .denied(description: "Access Denied", message: "")
+    }
+    
+    init(firstName: String?, lastName: String?, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: Date?, dateOfVisit: Date?, vendorCompany: String ) throws {
+        
+            if firstName == "" || firstName != nil {
+                throw EntrantDataError.missingName(description: "Vendor name is required")
+            }
+            
+            if lastName == "" || firstName != nil {
+                throw EntrantDataError.missingLastName(description: "Vendor lastname is required")
+                
+            }
+        
+            if dateOfBirth != nil {
+                throw EntrantDataError.missingBirthday(description: "Vendor date of birth is missing")
+            }
+        
+            if dateOfVisit != nil {
+                throw EntrantDataError.missingDateOfVisit(description: "Vendor date of visit is missing")
+            }
+        
+            if vendorCompany == "" {
+                throw EntrantDataError.missingVendorCompany(description: "Vendor company is missing")
+            }
+        
+        self.firstName = firstName
+        self.lastName = lastName
+        self.streetAddress = streetAddress
+        self.city = city
+        self.state = state
+        self.zipCode = zipCode
+        self.socialSecurityNumber = socialSecurityNumber
+        self.dateOfBirth = dateOfBirth
+        self.dateOfVisit = dateOfVisit
+        self.vendorCompany = vendorCompany
+        access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
+        permission = .denied(description: "Access Denied", message: "")
+    }
+    
+    func generateAccessByEntrantType() -> Access {
+        var areaAccessArray: [AreaAccess] = Array()
+        let rideAccessArray: [RideAccess] = Array()
+        let discountAccessArray: [DiscountAccess] = Array()
+        
+        switch self.vendorCompany {
+        case "Acme": areaAccessArray.append(contentsOf: [.kitchenAreas])
+        case "Orkin": areaAccessArray.append(contentsOf: [.amusementAreas, .rideControlAreas, .kitchenAreas])
+        case "Fedex": areaAccessArray.append(contentsOf: [.maintenanceAreas, .officeAreas])
+        case "NW Electrical": areaAccessArray.append(contentsOf: [.amusementAreas, .rideControlAreas, .kitchenAreas, .maintenanceAreas, .officeAreas])
+        default: break
+        }
+        
+        access = Access(areaAccess: areaAccessArray, rideAccess: rideAccessArray, discountAccess: discountAccessArray)
+        return self.access
+        
+
+    }
+    
+    func swipe() {
+        switch self.vendorCompany {
+        case "Acme": if let areaAccessArray = self.access.areaAccess {
+                        if areaAccessArray.contains(AreaAccess.kitchenAreas)  {
+                            self.permission = .granted(description: "Access Granted !", message: "")
+                        }
+                    }
+        case "Orkin": if let areaAccessArray = self.access.areaAccess {
+                        if areaAccessArray.contains(AreaAccess.amusementAreas) ||
+                            areaAccessArray.contains(AreaAccess.rideControlAreas) ||
+                            areaAccessArray.contains(AreaAccess.kitchenAreas) {
+                            self.permission = .granted(description: "Access Granted !", message: "")
+                        }
+                      }
+        case "Fedex": if let areaAccessArray = self.access.areaAccess {
+                        if areaAccessArray.contains(AreaAccess.maintenanceAreas) ||
+                            areaAccessArray.contains(AreaAccess.officeAreas) {
+                            self.permission = .granted(description: "Access Granted !", message: "")
+                        }
+                     }
+        case "NW Electrical": if let areaAccessArray = self.access.areaAccess {
+                                if areaAccessArray.contains(AreaAccess.amusementAreas) ||
+                                   areaAccessArray.contains(AreaAccess.rideControlAreas) ||
+                                   areaAccessArray.contains(AreaAccess.kitchenAreas) ||
+                                   areaAccessArray.contains(AreaAccess.maintenanceAreas) ||
+                                   areaAccessArray.contains(AreaAccess.officeAreas){
+                                    self.permission = .granted(description: "Access Granted !", message: "")
+                                }
+                             }
+        default: break
+        }
+        
+    }
+}
+
 // Protocols
 
 protocol Accessable {
@@ -516,7 +782,6 @@ protocol Swipeable {
     func swipe()
     
 }
-
 
 
 
