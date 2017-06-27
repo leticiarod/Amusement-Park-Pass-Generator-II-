@@ -22,7 +22,7 @@ class CreatePassController: UIViewController {
     var areaAccessStringArray: [String] = Array()
     var discountAccessStringArray: [String] = Array()
     var rideAccessStringArray: [String] = Array()
-    
+    var audio = Audio()
     
     @IBOutlet weak var testArea: UILabel!
     
@@ -50,8 +50,8 @@ class CreatePassController: UIViewController {
         secondBackButton.isHidden = true
         firstBackButton.isEnabled  = false
         secondBackButton.isEnabled  = false
-        print("test \(typeOfEntrant)")
-        print("Entrant name and last name \(String(describing: vendor.firstName))  and \(String(describing: vendor.lastName))")
+        audio.loadGameSounds()
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -391,10 +391,12 @@ class CreatePassController: UIViewController {
             case .granted( _, let message):
                 if message != nil {
                     testArea.text = "\(privilege): access allowed"
+                    audio.playAccessGrantedSound()
                 }
             case .denied( _, let message):
                 if message != nil {
                     testArea.text = "\(privilege): access denied"
+                    audio.playAccessDeniedSound()
                 }
             }
             
@@ -406,10 +408,12 @@ class CreatePassController: UIViewController {
             case .granted( _, let message):
                 if message != nil {
                     testArea.text = "\(privilege): access allowed"
+                    audio.playAccessGrantedSound()
                 }
             case .denied( _, let message):
                 if message != nil {
                     testArea.text = "\(privilege): access denied"
+                    audio.playAccessDeniedSound()
                 }
             }
             
@@ -421,10 +425,12 @@ class CreatePassController: UIViewController {
             case .granted( _, let message):
                 if message != nil {
                     testArea.text = "\(privilege): access allowed"
+                    audio.playAccessGrantedSound()
                 }
             case .denied( _, let message):
                 if message != nil {
                     testArea.text = "\(privilege): access denied"
+                    audio.playAccessDeniedSound()
                 }
             }
             

@@ -145,9 +145,11 @@ class ViewController: UIViewController  {
         
         // Convert date to string
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-mm-yyyy" //Your New Date format as per requirement change it own
+        //Your New Date format as per requirement change it own
+        dateFormatter.dateFormat = "dd-mm-yyyy"
         if let d = entrantByType.dateOfBirth {
-         dateOfBirth = dateFormatter.string(from: d) //pass Date here
+            //pass Date here
+            dateOfBirth = dateFormatter.string(from: d)
         }
         
         // Date of Birth

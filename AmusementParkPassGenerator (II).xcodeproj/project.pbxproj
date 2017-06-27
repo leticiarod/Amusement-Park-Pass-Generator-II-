@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		970ABFE21EFE3A6300ED4D0C /* PlugValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970ABFE11EFE3A6300ED4D0C /* PlugValues.swift */; };
 		970ABFE61EFF7C2700ED4D0C /* CreatePassController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970ABFE51EFF7C2700ED4D0C /* CreatePassController.swift */; };
+		970ABFE91F02BA0700ED4D0C /* AccessDenied.wav in Resources */ = {isa = PBXBuildFile; fileRef = 970ABFE71F02BA0700ED4D0C /* AccessDenied.wav */; };
+		970ABFEA1F02BA0700ED4D0C /* AccessGranted.wav in Resources */ = {isa = PBXBuildFile; fileRef = 970ABFE81F02BA0700ED4D0C /* AccessGranted.wav */; };
+		970ABFEC1F02BA3000ED4D0C /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970ABFEB1F02BA3000ED4D0C /* Audio.swift */; };
 		97A7EC9B1EFC3DCC00E3FB70 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */; };
 		97DE2CEC1EF2E3C20066EBA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2CEB1EF2E3C20066EBA8 /* AppDelegate.swift */; };
 		97DE2CEE1EF2E3C20066EBA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DE2CED1EF2E3C20066EBA8 /* ViewController.swift */; };
@@ -34,6 +37,9 @@
 /* Begin PBXFileReference section */
 		970ABFE11EFE3A6300ED4D0C /* PlugValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlugValues.swift; sourceTree = "<group>"; };
 		970ABFE51EFF7C2700ED4D0C /* CreatePassController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePassController.swift; sourceTree = "<group>"; };
+		970ABFE71F02BA0700ED4D0C /* AccessDenied.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = AccessDenied.wav; path = Assets.xcassets/AccessDenied.wav; sourceTree = "<group>"; };
+		970ABFE81F02BA0700ED4D0C /* AccessGranted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = AccessGranted.wav; path = Assets.xcassets/AccessGranted.wav; sourceTree = "<group>"; };
+		970ABFEB1F02BA3000ED4D0C /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIComponents.swift; sourceTree = "<group>"; };
 		97DE2CE81EF2E3C20066EBA8 /* AmusementParkPassGenerator (II).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AmusementParkPassGenerator (II).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97DE2CEB1EF2E3C20066EBA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,11 +101,14 @@
 				97DE2CED1EF2E3C20066EBA8 /* ViewController.swift */,
 				97DE2CEF1EF2E3C20066EBA8 /* Main.storyboard */,
 				97DE2CF21EF2E3C20066EBA8 /* Assets.xcassets */,
+				970ABFE71F02BA0700ED4D0C /* AccessDenied.wav */,
+				970ABFE81F02BA0700ED4D0C /* AccessGranted.wav */,
 				97DE2CF41EF2E3C20066EBA8 /* LaunchScreen.storyboard */,
 				97DE2CF71EF2E3C20066EBA8 /* Info.plist */,
 				97A7EC9A1EFC3DCC00E3FB70 /* UIComponents.swift */,
 				970ABFE11EFE3A6300ED4D0C /* PlugValues.swift */,
 				970ABFE51EFF7C2700ED4D0C /* CreatePassController.swift */,
+				970ABFEB1F02BA3000ED4D0C /* Audio.swift */,
 			);
 			path = "AmusementParkPassGenerator (II)";
 			sourceTree = "<group>";
@@ -200,8 +209,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				97DE2CF61EF2E3C20066EBA8 /* LaunchScreen.storyboard in Resources */,
+				970ABFEA1F02BA0700ED4D0C /* AccessGranted.wav in Resources */,
 				97DE2CF31EF2E3C20066EBA8 /* Assets.xcassets in Resources */,
 				97DE2CF11EF2E3C20066EBA8 /* Main.storyboard in Resources */,
+				970ABFE91F02BA0700ED4D0C /* AccessDenied.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				970ABFEC1F02BA3000ED4D0C /* Audio.swift in Sources */,
 				97DE2CEE1EF2E3C20066EBA8 /* ViewController.swift in Sources */,
 				970ABFE21EFE3A6300ED4D0C /* PlugValues.swift in Sources */,
 				97DE2D0C1EF2E4880066EBA8 /* PassGenerator.swift in Sources */,
