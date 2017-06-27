@@ -27,6 +27,7 @@ enum EmployeeType {
     case rideServices
     case maintenance
     case manager
+    case nonType
     
 }
 
@@ -119,7 +120,17 @@ class Employee {
     let dateOfBirth: Date?
     let type: EmployeeType
     
-    
+    init(){
+        self.firstName = ""
+        self.lastName = ""
+        self.streetAddress = ""
+        self.city = ""
+        self.state = ""
+        self.zipCode = ""
+        self.socialSecurityNumber = nil
+        self.dateOfBirth = nil
+        self.type = .nonType
+    }
     
     init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: Date?, type: EmployeeType) throws {
         
@@ -176,6 +187,12 @@ class HourlyEmployee: Employee, Accessable, Swipeable {
         
         }
  
+    override init(){
+        self.access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
+        self.permission = .denied(description: "Access Denied", message: nil)
+        super.init()
+    }
+    
     func generateAccessByEntrantType() -> Access {
         var areaAccessArray: [AreaAccess] = Array()
         var rideAccessArray: [RideAccess] = Array()
@@ -198,7 +215,7 @@ class HourlyEmployee: Employee, Accessable, Swipeable {
         rideAccessArray.append(contentsOf: [.allRides])
         discountAccessArray.append(contentsOf: [.onFood(percentage: 25), .onMarchandise(percentage: 25)])
 
-            
+        case .nonType: break
         }
         
         access = Access(areaAccess: areaAccessArray, rideAccess: rideAccessArray, discountAccess: discountAccessArray)
@@ -206,82 +223,106 @@ class HourlyEmployee: Employee, Accessable, Swipeable {
         return self.access
     }
     
-    func swipe() {
+    func swipe(areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
+        permission = .denied(description: "Access Denied", message: "")
         var message: String = ""
         if isBirthdayDay() {
             message = "Happy birthday \(firstName) !!"
         }
         
-        switch type {
-        case .foodServices:
-            if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                             self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
-                if areaAccessArray.contains(AreaAccess.amusementAreas) || areaAccessArray.contains(AreaAccess.kitchenAreas) || rideAccessArray.contains(RideAccess.allRides) || contains(foodDiscount: 15, marchandiseDiscount: 25, discountAccessArray: discountAccessArray) {
-                    self.permission = .granted(description: "Access Granted !", message: message)
-                }
-                
-            }
-        case .rideServices:
-            if let areaAccessArray = self.access.areaAccess, let  rideAccessArray = self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
-                if areaAccessArray.contains(AreaAccess.amusementAreas) ||
-                                areaAccessArray.contains(AreaAccess.rideControlAreas)  || rideAccessArray.contains(RideAccess.allRides) || contains(foodDiscount: 15, marchandiseDiscount: 25, discountAccessArray: discountAccessArray)
-                {
-                    print("discountAccessArray \(discountAccessArray)")
-                                    self.permission = .granted(description: "Access Granted !", message: message)
-                }
-                
-            }
-        case .maintenance:
-            if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                             self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
-            if areaAccessArray.contains(AreaAccess.amusementAreas) ||
-                areaAccessArray.contains(AreaAccess.kitchenAreas) ||
-                areaAccessArray.contains(AreaAccess.rideControlAreas) ||
-                areaAccessArray.contains(AreaAccess.maintenanceAreas) || rideAccessArray.contains(RideAccess.allRides) || contains(foodDiscount: 15, marchandiseDiscount: 25, discountAccessArray: discountAccessArray) {
+        if let areaAccess = areaAccess {
+        switch areaAccess {
+        case .amusementAreas: if let areaAccessArray = self.access.areaAccess{
+            if areaAccessArray.contains(AreaAccess.amusementAreas){
                 self.permission = .granted(description: "Access Granted !", message: message)
             }
-           
             }
-        case .manager:
-                        if let areaAccessArray = self.access.areaAccess, let  rideAccessArray = self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
-                                if areaAccessArray.contains(AreaAccess.amusementAreas) ||
-                                    areaAccessArray.contains(AreaAccess.kitchenAreas) ||
-                                    areaAccessArray.contains(AreaAccess.rideControlAreas) ||
-                                    areaAccessArray.contains(AreaAccess.maintenanceAreas) ||
-                                    areaAccessArray.contains(AreaAccess.officeAreas) || rideAccessArray.contains(RideAccess.allRides) ||
-                                    contains(foodDiscount: 25, marchandiseDiscount: 25, discountAccessArray: discountAccessArray){
-                                    self.permission = .granted(description: "Access Granted !", message: message)
-                                }
-                            
+        case .kitchenAreas: if let areaAccessArray = self.access.areaAccess{
+            if areaAccessArray.contains(AreaAccess.kitchenAreas){
+                self.permission = .granted(description: "Access Granted !", message: message)
             }
-       
+            }
+            
+        case .maintenanceAreas: if let areaAccessArray = self.access.areaAccess{
+            if areaAccessArray.contains(AreaAccess.maintenanceAreas){
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+            
+        case .officeAreas: if let areaAccessArray = self.access.areaAccess{
+            if areaAccessArray.contains(AreaAccess.officeAreas){
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+            
+        case .rideControlAreas: if let  areaAccessArray = self.access.areaAccess {
+            if areaAccessArray.contains(AreaAccess.rideControlAreas) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }}
+            
+        }
+    }
+    
+    if let rideAccess = rideAccess {
+        switch rideAccess {
+        case .allRides: if let rideAccessArray = self.access.rideAccess {
+            if rideAccessArray.contains(RideAccess.allRides){
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+        case .skipAllRideLines: if let rideAccessArray = self.access.rideAccess {
+            if rideAccessArray.contains(RideAccess.skipAllRideLines){
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+        }
+    }
+    
+    if let discountAccess = discountAccess {
+        switch discountAccess {
+        case .onFood(percentage: 10) : if let discountAccessArray = self.access.discountAccess{
+            if contains(foodDiscount: 10, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+        case  .onFood(percentage: 15):
+            if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 15, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+            
+        case .onFood(percentage: 25): if let discountAccessArray = self.access.discountAccess{
+            if contains(foodDiscount: 25, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+            
+        case .onMarchandise(percentage: 20): if let discountAccessArray = self.access.discountAccess{
+            if contains(foodDiscount: nil, merchDiscount: 20, discountAccessArray: discountAccessArray) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+            
+        case .onMarchandise(percentage: 25):
+            
+            if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 25, discountAccessArray: discountAccessArray) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+            
+        case .onMarchandise(percentage: 10): if let discountAccessArray = self.access.discountAccess{
+            if contains(foodDiscount: nil, merchDiscount: 10, discountAccessArray: discountAccessArray) {
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+         default: break
+            
+        }
     }
 }
-    
-    func contains(foodDiscount: Double, marchandiseDiscount: Double, discountAccessArray: [DiscountAccess]) -> Bool {
-        var  discountAccessArrayCopy: [DiscountAccess] = Array()
-        var index = 0
-        var contains = false
-        for item in discountAccessArray{
-            discountAccessArrayCopy.append(item)
-        }
-        
-        while index < discountAccessArrayCopy.count {
-            if let item = discountAccessArrayCopy.popLast(){
-                if item == DiscountAccess.onFood(percentage: foodDiscount) {
-                    contains = true
-                }
-                else {
-                    if item == DiscountAccess.onMarchandise(percentage: marchandiseDiscount){
-                        contains = true
-                    }
-                }
-                
-                }
-            
-            index += 1
-        }
-        return contains
-    }
-    
+
     func isBirthdayDay() -> Bool{
         
         let date = Date()
@@ -311,10 +352,17 @@ class ContractEmployee: Employee, Accessable,Swipeable {
     var permission: Permission
     let projectID: String
     
-    override init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: Date?, type: EmployeeType) throws {
+    override init(){
+        self.access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
+        self.permission = .denied(description: "Access Denied", message: nil)
+        self.projectID = "0000"
+        super.init()
+    }
+    
+     init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: Date?, type: EmployeeType, projectID: String) throws {
         access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
         permission = .denied(description: "Access Denied", message: nil)
-        self.projectID = ""
+        self.projectID = projectID
         try super.init(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: socialSecurityNumber, dateOfBirth: dateOfBirth, type: type)
         
     }
@@ -338,50 +386,102 @@ class ContractEmployee: Employee, Accessable,Swipeable {
 
     }
     
-    func swipe() {
+    func swipe(areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
+        permission = .denied(description: "Access Denied", message: "")
+        let message = ""
         
-        switch self.projectID {
-        case "1001": if let areaAccessArray = self.access.areaAccess {
-                        if areaAccessArray.contains(AreaAccess.amusementAreas) ||
-                            areaAccessArray.contains(AreaAccess.rideControlAreas) {
-                            self.permission = .granted(description: "Access Granted !", message: "")
-                        }
-                     }
-        case "1002": if let areaAccessArray = self.access.areaAccess {
-                        if areaAccessArray.contains(AreaAccess.amusementAreas) ||
-                            areaAccessArray.contains(AreaAccess.rideControlAreas) ||
-                            areaAccessArray.contains(AreaAccess.maintenanceAreas) {
-                            self.permission = .granted(description: "Access Granted !", message: "")
-                        }
-                    }
-        case "1003": if let areaAccessArray = self.access.areaAccess {
-                        if areaAccessArray.contains(AreaAccess.amusementAreas) ||
-                            areaAccessArray.contains(AreaAccess.rideControlAreas) ||
-                            areaAccessArray.contains(AreaAccess.kitchenAreas) ||
-                            areaAccessArray.contains(AreaAccess.maintenanceAreas) ||
-                            areaAccessArray.contains(AreaAccess.officeAreas) {
-                            self.permission = .granted(description: "Access Granted !", message: "")
-                        }
-                     }
-        case "2001": if let areaAccessArray = self.access.areaAccess {
-                        if areaAccessArray.contains(AreaAccess.officeAreas) {
-                            self.permission = .granted(description: "Access Granted !", message: "")
-                        }
-                     }
-        case "2002": if let areaAccessArray = self.access.areaAccess {
-                        if areaAccessArray.contains(AreaAccess.kitchenAreas) ||
-                            areaAccessArray.contains(AreaAccess.maintenanceAreas){
-                            self.permission = .granted(description: "Access Granted !", message: "")
-                        }
-                     }
-        default: break
+        if let areaAccess = areaAccess{
+            
+            switch areaAccess {
+            case .amusementAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.amusementAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case .kitchenAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.kitchenAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .maintenanceAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.maintenanceAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .officeAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.officeAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .rideControlAreas: if let  areaAccessArray = self.access.areaAccess {
+                if areaAccessArray.contains(AreaAccess.rideControlAreas) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }}
+                
+            }
         }
-
+        
+        if let rideAccess = rideAccess {
+            switch rideAccess {
+            case .allRides: if let rideAccessArray = self.access.rideAccess {
+                if rideAccessArray.contains(RideAccess.allRides){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case .skipAllRideLines: if let rideAccessArray = self.access.rideAccess {
+                if rideAccessArray.contains(RideAccess.skipAllRideLines){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            }
+        }
+        
+        if let discountAccess = discountAccess {
+            switch discountAccess {
+            case .onFood(percentage: 10) : if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 10, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case  .onFood(percentage: 15): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 15, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onFood(percentage: 25): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 25, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onMarchandise(percentage: 20): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 20, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onMarchandise(percentage: 25): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 25, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onMarchandise(percentage: 10): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 10, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            default: break
+                
+            }
+        }
     }
     
-    
 }
-
 
 class Guest: Accessable, Swipeable {
     
@@ -518,21 +618,24 @@ class Guest: Accessable, Swipeable {
         return self.access
     }
     
-    func initialSwipe(){
+    func initialSwipe(areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) -> String? {
+        var message: String? = nil
         // Run timer
         if isTimerRunning == false {
             isTimerRunning = true
-            swipe()
+            swipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess)
             timer = Timer.scheduledTimer(timeInterval: 1, target:self, selector: (#selector(self.updateCounter)), userInfo: nil, repeats: true)
         }
         else {
+            message = "You are not able to swipe, try again in a few seconds"
             print("You are not able to swipe, try again in a few seconds")
         }
         
-
+        return message
     }
     
-    func swipe() {
+    func swipe(areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
+        permission = .denied(description: "Access Denied", message: "")
         var message: String = ""
         if isBirthdayDay() {
             if let firstName = self.firstName {
@@ -543,69 +646,96 @@ class Guest: Accessable, Swipeable {
             }
         }
         
+        if let areaAccess = areaAccess{
         
-        switch type {
-        case .classic:
-            if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                             self.access.rideAccess {
-                if areaAccessArray.contains(AreaAccess.amusementAreas) || rideAccessArray.contains(RideAccess.allRides)  {
-                    self.permission = .granted(description: "Access Granted !", message: message)
-                    }
-               
+        switch areaAccess {
+        case .amusementAreas: if let areaAccessArray = self.access.areaAccess{
+            if areaAccessArray.contains(AreaAccess.amusementAreas){
+                self.permission = .granted(description: "Access Granted !", message: message)
             }
-        case .vip:
-            if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                             self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
-                if areaAccessArray.contains(AreaAccess.amusementAreas) || rideAccessArray.contains(RideAccess.allRides) || rideAccessArray.contains(RideAccess.skipAllRideLines) || contains(foodDiscount: 10, marchandiseDiscount: 20, discountAccessArray: discountAccessArray) {
+            }
+        case .kitchenAreas: if let areaAccessArray = self.access.areaAccess{
+            if areaAccessArray.contains(AreaAccess.kitchenAreas){
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+
+        case .maintenanceAreas: if let areaAccessArray = self.access.areaAccess{
+            if areaAccessArray.contains(AreaAccess.maintenanceAreas){
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+
+        case .officeAreas: if let areaAccessArray = self.access.areaAccess{
+            if areaAccessArray.contains(AreaAccess.officeAreas){
+                self.permission = .granted(description: "Access Granted !", message: message)
+            }
+            }
+
+        case .rideControlAreas: if let  areaAccessArray = self.access.areaAccess {
+                                    if areaAccessArray.contains(AreaAccess.rideControlAreas) {
+            self.permission = .granted(description: "Access Granted !", message: message)
+            }}
+
+        }
+    }
+        
+        if let rideAccess = rideAccess {
+            switch rideAccess {
+            case .allRides: if let rideAccessArray = self.access.rideAccess {
+                                if rideAccessArray.contains(RideAccess.allRides){
+                                    self.permission = .granted(description: "Access Granted !", message: message)
+                                }
+                            }
+            case .skipAllRideLines: if let rideAccessArray = self.access.rideAccess {
+                if rideAccessArray.contains(RideAccess.skipAllRideLines){
                     self.permission = .granted(description: "Access Granted !", message: message)
                 }
+                }
+            }
+        }
+        
+        if let discountAccess = discountAccess {
+            switch discountAccess {
+            case .onFood(percentage: 10) : if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 10, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case  .onFood(percentage: 15): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 15, merchDiscount:nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+
+            case .onFood(percentage: 25): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 25, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+
+            case .onMarchandise(percentage: 20): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 20, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+
+            case .onMarchandise(percentage: 25): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil,  merchDiscount: 25, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+
+            case .onMarchandise(percentage: 10): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 10, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            default: break
               
             }
-        case .freeChild:
-            if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                             self.access.rideAccess {
-                if areaAccessArray.contains(AreaAccess.amusementAreas) || rideAccessArray.contains(RideAccess.allRides) {
-                    self.permission = .granted(description: "Access Granted !", message: message)
-                }
-            
-            }
-        case .senior: if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                               self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
-            if areaAccessArray.contains(AreaAccess.amusementAreas) || rideAccessArray.contains(RideAccess.allRides) || rideAccessArray.contains(RideAccess.skipAllRideLines) || contains(foodDiscount: 10, marchandiseDiscount: 10, discountAccessArray: discountAccessArray) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            
-            }
-        case .seassonPass: if let areaAccessArray = self.access.areaAccess, let  rideAccessArray =                                             self.access.rideAccess, let discountAccessArray = self.access.discountAccess{
-            if areaAccessArray.contains(AreaAccess.amusementAreas) || rideAccessArray.contains(RideAccess.allRides) || rideAccessArray.contains(RideAccess.skipAllRideLines) || contains(foodDiscount: 10, marchandiseDiscount: 20, discountAccessArray: discountAccessArray) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            
-            }
-    }
+        }
 }
-    
-    func contains(foodDiscount: Double, marchandiseDiscount: Double, discountAccessArray: [DiscountAccess]) -> Bool {
-        var  discountAccessArrayCopy: [DiscountAccess] = Array()
-        var index = 0
-        var contains = false
-        for item in discountAccessArray{
-            discountAccessArrayCopy.append(item)
-        }
-        
-        while index < discountAccessArrayCopy.count {
-            if let item = discountAccessArrayCopy.popLast(){
-                if item == DiscountAccess.onFood(percentage: foodDiscount) {
-                    contains = true
-                }
-                else {
-                    if item == DiscountAccess.onMarchandise(percentage: marchandiseDiscount){
-                        contains = true
-                    }
-                }
-                
-            }
-            
-            index += 1
-        }
-        return contains
-    }
     
     func isBirthdayDay() -> Bool{
         
@@ -681,20 +811,20 @@ class Vendor: Accessable, Swipeable {
     
     init(firstName: String?, lastName: String?, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: Date?, dateOfVisit: Date?, vendorCompany: String ) throws {
         
-            if firstName == "" || firstName != nil {
+            if firstName == "" || firstName == nil {
                 throw EntrantDataError.missingName(description: "Vendor name is required")
             }
             
-            if lastName == "" || firstName != nil {
+            if lastName == "" || lastName == nil {
                 throw EntrantDataError.missingLastName(description: "Vendor lastname is required")
                 
             }
         
-            if dateOfBirth != nil {
+            if dateOfBirth == nil {
                 throw EntrantDataError.missingBirthday(description: "Vendor date of birth is missing")
             }
         
-            if dateOfVisit != nil {
+            if dateOfVisit == nil {
                 throw EntrantDataError.missingDateOfVisit(description: "Vendor date of visit is missing")
             }
         
@@ -735,38 +865,99 @@ class Vendor: Accessable, Swipeable {
 
     }
     
-    func swipe() {
-        switch self.vendorCompany {
-        case "Acme": if let areaAccessArray = self.access.areaAccess {
-                        if areaAccessArray.contains(AreaAccess.kitchenAreas)  {
-                            self.permission = .granted(description: "Access Granted !", message: "")
-                        }
-                    }
-        case "Orkin": if let areaAccessArray = self.access.areaAccess {
-                        if areaAccessArray.contains(AreaAccess.amusementAreas) ||
-                            areaAccessArray.contains(AreaAccess.rideControlAreas) ||
-                            areaAccessArray.contains(AreaAccess.kitchenAreas) {
-                            self.permission = .granted(description: "Access Granted !", message: "")
-                        }
-                      }
-        case "Fedex": if let areaAccessArray = self.access.areaAccess {
-                        if areaAccessArray.contains(AreaAccess.maintenanceAreas) ||
-                            areaAccessArray.contains(AreaAccess.officeAreas) {
-                            self.permission = .granted(description: "Access Granted !", message: "")
-                        }
-                     }
-        case "NW Electrical": if let areaAccessArray = self.access.areaAccess {
-                                if areaAccessArray.contains(AreaAccess.amusementAreas) ||
-                                   areaAccessArray.contains(AreaAccess.rideControlAreas) ||
-                                   areaAccessArray.contains(AreaAccess.kitchenAreas) ||
-                                   areaAccessArray.contains(AreaAccess.maintenanceAreas) ||
-                                   areaAccessArray.contains(AreaAccess.officeAreas){
-                                    self.permission = .granted(description: "Access Granted !", message: "")
-                                }
-                             }
-        default: break
+    func swipe(areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
+        permission = .denied(description: "Access Denied", message: "")
+        let message = ""
+        
+        if let areaAccess = areaAccess{
+            
+            switch areaAccess {
+            case .amusementAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.amusementAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case .kitchenAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.kitchenAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .maintenanceAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.maintenanceAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .officeAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.officeAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .rideControlAreas: if let  areaAccessArray = self.access.areaAccess {
+                if areaAccessArray.contains(AreaAccess.rideControlAreas) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }}
+                
+            }
         }
         
+        if let rideAccess = rideAccess {
+            switch rideAccess {
+            case .allRides: if let rideAccessArray = self.access.rideAccess {
+                if rideAccessArray.contains(RideAccess.allRides){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case .skipAllRideLines: if let rideAccessArray = self.access.rideAccess {
+                if rideAccessArray.contains(RideAccess.skipAllRideLines){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            }
+        }
+        
+        if let discountAccess = discountAccess {
+            switch discountAccess {
+            case .onFood(percentage: 10) : if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 10, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case  .onFood(percentage: 15): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 15, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onFood(percentage: 25): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 25, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onMarchandise(percentage: 20): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount:nil, merchDiscount: 20, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onMarchandise(percentage: 25): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 25, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onMarchandise(percentage: 10): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 10, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                default: break
+                
+            }
+        }
     }
 }
 
@@ -779,15 +970,38 @@ protocol Accessable {
 }
 
 protocol Swipeable {
-    func swipe()
+    func swipe(areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?)
     
 }
 
+extension Swipeable {
+    func contains(foodDiscount: Double?, merchDiscount: Double?, discountAccessArray: [DiscountAccess]) -> Bool {
+        var  discountAccessArrayCopy: [DiscountAccess] = Array()
+        var index = 0
+        var contains = false
+        for item in discountAccessArray{
+            discountAccessArrayCopy.append(item)
+        }
+        
+        while index < discountAccessArrayCopy.count {
+            if let discount = foodDiscount{
+                if discountAccessArrayCopy[index] == DiscountAccess.onFood(percentage: discount) {
+                    contains = true
+                }
+            }
+                
+            else {
+                if let discount = merchDiscount {
+                    if discountAccessArrayCopy[index] == DiscountAccess.onMarchandise(percentage: discount){
+                        contains = true
+                    }
+                }
+            }
+            index += 1
+            
+            
+        }
+        return contains
+    }
 
-
-
-
-
-
-
-
+}

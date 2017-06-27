@@ -59,13 +59,17 @@ class ViewController: UIViewController  {
     
     
     @IBOutlet weak var generatePassButton: UIButton!
-    
     @IBOutlet weak var populateDataButton: UIButton!
     
-    var guest = Guest()
     var uiComponents = UIComponents()
-    
     var subEntrantTypeSelected = ""
+    
+    var guest = Guest()
+    var hourlyEmployee = HourlyEmployee()
+    var contractEmployee = ContractEmployee()
+    var vendor = Vendor()
+    var access = Access()
+    var firstName = "", lastName = "", SSN = "", date = Date(), streetAddress="", city = "", state = "", zipCode = "", vendorCompany = "", projectID = "", dateOfBirth: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,60 +77,12 @@ class ViewController: UIViewController  {
         uiComponents.createInterfaceButtons()
         initViews()
         disableButtons()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        // UNCOMMENT the following block to test feature to prevent a guest from swiping into the same ride twice in row within 5 seconds
-        
-        /*
-        do{
-            // Create an instance of Guest to test method initialSwipe()
-            guest = try Guest(firstName: "Guest1", lastName: "GuestLastName", streetAddress: "test", city: "test", state: "test", zipCode: "11800", socialSecurityNumber: "12334", dateOfBirth: Date(), type: .classic) // Be aware that dateOfBirth is the current date so is guest's birthday
-            // Generate Privileges as established in Business Rules Matrix
-            guest.generateAccessByEntrantType()
-            // Initiate Swipe with timer of 5 seconds, to check if has access to the setted privileges
-            guest.initialSwipe()
-            // 3 seconds after a guest try to swipe again..
-            secondSwipeWithDelay(seconds: 3)
-        } catch {
-            
-            fatalError()
-        }
-        
-        
- 
-         */
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    func secondSwipeWithDelay(seconds: Int) {
-        // Converts a delay in seconds to nanoseconds as signed 64 bit integer
-        let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
-        // Calculates a time value to execute the method given current time and delay
-        let dispatchTime = DispatchTime.now() + Double(delay) / Double(NSEC_PER_SEC)
-        
-        // Executes the nextRound method at the dispatch time on the main queue
-        DispatchQueue.main.asyncAfter(deadline: dispatchTime) {
-            
-            // Do a second swipe
-            
-            self.guest.initialSwipe()
-            
-            let permission = self.guest.permission
-            switch permission {
-            case .granted(let description, let message):
-                                                        if let message = message {
-                                                            print(" Permission for first swipe: \(description) \(message)")}
-            case .denied(let description, let message):
-                                                        if let message = message {
-                                                            print("Permission for first swipe: \(description) \(message)")}
-            }
-        }
-    }
-    
     
     @IBAction func guestButtonPressed(_ sender: Any) {
         
@@ -186,7 +142,6 @@ class ViewController: UIViewController  {
         let entrantByType = entrants.getEntrantByType(subEntrantTypeSelected)
         var index = 0
         var textField = UITextField()
-        var dateOfBirth: String = ""
         
         // Convert date to string
         let dateFormatter = DateFormatter()
@@ -198,45 +153,76 @@ class ViewController: UIViewController  {
         // Date of Birth
         textField = textFieldCollection[index]
         textField.text = dateOfBirth
+        if let d = entrantByType.dateOfBirth{
+            date = d
+        }
         index += 1
         // SSN
         textField = textFieldCollection[index]
         textField.text = entrantByType.socialSecurityNumber
+        if let ssn = entrantByType.socialSecurityNumber {
+            SSN = ssn
+        }
         index += 1
         // Project
-        /* textField = textFieldCollection[index]
-        textField.text = entrantByType.
-         */
+         textField = textFieldCollection[index]
+        textField.text = entrantByType.projectID
+        if let p = entrantByType.projectID {
+            projectID = p
+        }
         index += 1
         // First Name
         textField = textFieldCollection[index]
         textField.text = entrantByType.firstName
+        if let fn = entrantByType.firstName as String! {
+            firstName = fn
+        }
         index += 1
         // Last Name
         textField = textFieldCollection[index]
         textField.text = entrantByType.lastName
+        if let ln = entrantByType.lastName {
+            lastName = ln
+        }
         index += 1
         // Company
-        /* textField = textFieldCollection[index]
-        textField.text = entrantByType.
-        */
+         textField = textFieldCollection[index]
+        textField.text = entrantByType.vendorCompany
+        if let c = entrantByType.vendorCompany {
+            vendorCompany = c
+        }
         index += 1
         // Street Address
         textField = textFieldCollection[index]
         textField.text = entrantByType.streetAddress
+        if let st = entrantByType.streetAddress {
+            streetAddress = st
+        }
         index += 1
         // City
         textField = textFieldCollection[index]
         textField.text = entrantByType.city
+        if let c = entrantByType.city {
+            city = c
+        }
         index += 1
         // State
         textField = textFieldCollection[index]
         textField.text = entrantByType.state
+        if let s = entrantByType.state {
+            state = s
+        }
         index += 1
         // Zip Code
         textField = textFieldCollection[index]
         textField.text = entrantByType.zipCode
+        if let zc = entrantByType.zipCode {
+            zipCode = zc
+        }
         index += 1
+        
+        createEntrantObjectByType()
+        
     }
     
     //
@@ -309,9 +295,27 @@ class ViewController: UIViewController  {
                 enableVendorForm()
                 subEntrantTypeSelected = "Vendor"
         default:
-            print("default")
+            break
         }
         
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "CreatePass" {
+            guard let createPassController = segue.destination as? CreatePassController else {
+                return
+            }
+            switch subEntrantTypeSelected {
+            case "Child", "Classic", "SeniorGuest", "VIP", "SeassonPass":
+                createPassController.guest = self.guest
+            case "Food", "Ride", "Maintenance", "SeniorManager", "General": createPassController.hourlyEmployee = self.hourlyEmployee
+            case "Contractor": createPassController.contractEmployee = self.contractEmployee
+            case "Vendor": createPassController.vendor = self.vendor
+            default:
+                break
+            }
+           createPassController.typeOfEntrant = subEntrantTypeSelected
+        }
     }
 
     // MARK: Helper Methods
@@ -440,6 +444,59 @@ class ViewController: UIViewController  {
            $0.text = ""
         }
     }
-
+    
+    //
+    func createEntrantObjectByType() {
+        do {
+            
+            switch subEntrantTypeSelected {
+            case "Child": try guest = Guest(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .freeChild)
+            access = guest.generateAccessByEntrantType()
+                
+            case "Classic": try guest = Guest(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .classic)
+            access = guest.generateAccessByEntrantType()
+                
+            case "SeniorGuest": try guest = Guest(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .senior)
+            access = guest.generateAccessByEntrantType()
+            case "VIP": try guest = Guest(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .vip)
+            access = guest.generateAccessByEntrantType()
+            case "SeassonPass": try guest = Guest(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .seassonPass)
+            access = guest.generateAccessByEntrantType()
+            case "Food": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .foodServices)
+            access = hourlyEmployee.generateAccessByEntrantType()
+            case "Ride": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .rideServices)
+            access = hourlyEmployee.generateAccessByEntrantType()
+            case "Maintenance": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .maintenance)
+            access = hourlyEmployee.generateAccessByEntrantType()
+            case "SeniorManager": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .manager)
+            access = hourlyEmployee.generateAccessByEntrantType()
+            case "General": print("case general")
+            try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .manager)
+            case "Assistant": break
+                
+            case "Contractor": try contractEmployee = ContractEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .nonType, projectID: projectID)
+            access = contractEmployee.generateAccessByEntrantType()
+            case "Vendor":
+                try vendor = Vendor(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, dateOfVisit: Date(), vendorCompany: vendorCompany)
+                access = vendor.generateAccessByEntrantType()
+            default: break
+            }
+        } catch EntrantDataError.missingName(description: "Missing Name") {
+            print("missing name")
+        } catch EntrantDataError.missingLastName(description: "Missing Lastname"){
+            print("missing lastname")
+        } catch EntrantDataError.missingBirthday(description: "Missing birthday") {
+            print("missing birthday")
+        } catch EntrantDataError.missingDateOfVisit(description: "Missing day of visit"){
+            print("missing date of visit")
+        } catch EntrantDataError.missingVendorCompany(description: "Missing vendor company"){
+            print("missing vendor company")
+        } catch EntrantDataError.missingCity(description: "Missing city") {
+            print("missing city")
+        } catch {
+            print("otros errores")
+        }
+        
+    }
 }
 

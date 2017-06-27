@@ -37,7 +37,7 @@ struct Entrants {
         "General" : Entrant(firstName: "Leticia", lastName: "Knight", streetAddress: "Rambla", city: "Montevideo", state: "Montevideo", zipCode: "11800", socialSecurityNumber: nil, dateOfBirth: Date(timeIntervalSinceReferenceDate: -1103760000.0), dateOfVisit: nil, vendorCompany: nil, projectID: nil),
         "Assistant" : Entrant(firstName: "Daniel", lastName: "Saredo", streetAddress: "Boulevard España", city: "Montevideo", state: "Montevideo", zipCode: "11700", socialSecurityNumber: nil, dateOfBirth: Date(timeIntervalSinceReferenceDate: -2207520000.0), dateOfVisit: nil, vendorCompany: nil, projectID: nil),
         "Contractor" : Entrant(firstName: "Claudia", lastName: "Yates", streetAddress: "26 de Marzo", city: "Montevideo", state: "Montevideo", zipCode: "11800", socialSecurityNumber: nil, dateOfBirth: Date(timeIntervalSinceReferenceDate: -1103760000.0), dateOfVisit: nil, vendorCompany: nil, projectID: "1001"),
-        "Vendor" : Entrant(firstName: "Francis", lastName: "Underwood", streetAddress: "Avenida Brasil", city: "Montevideo", state: "Montevideo", zipCode: "11700", socialSecurityNumber: nil, dateOfBirth: Date(timeIntervalSinceReferenceDate: -2207520000.0), dateOfVisit: Date(), vendorCompany: "Acme", projectID: nil)
+        "Vendor" : Entrant(firstName: "Francis", lastName: "Underwood", streetAddress: "Avenida Brasil", city: "Montevideo", state: "Montevideo", zipCode: "11700", socialSecurityNumber: nil, dateOfBirth: Date(timeIntervalSinceReferenceDate: -2207520000.0), dateOfVisit: Date(), vendorCompany: "NW Electrical", projectID: nil)
         ]
     //-123456789.0
 
