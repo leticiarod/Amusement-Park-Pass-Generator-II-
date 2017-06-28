@@ -25,19 +25,11 @@ class CreatePassController: UIViewController {
     var audio = Audio()
     
     @IBOutlet weak var testArea: UILabel!
-    
     @IBOutlet var testButtonsStackViewCollection: [UIButton]!
-    
     @IBOutlet weak var infoPassStackView: UIStackView!
-    
     @IBOutlet weak var nameLabelPass: UILabel!
-    
     @IBOutlet weak var typeLabelPass: UILabel!
-    
-    
     @IBOutlet weak var firstBackButton: UIButton!
-    
-    
     @IBOutlet weak var secondBackButton: UIButton!
     
     override func viewDidLoad() {
@@ -92,7 +84,7 @@ class CreatePassController: UIViewController {
         disableViewsInStackView(uiComponents.areaAccessButtonsArray)
         disableViewsInStackView(uiComponents.rideAccessButtonsArray)
         disableViewsInStackView(uiComponents.discountAccessButtonsArray)
-       enableTestButtonsStackViewCollection()
+        enableTestButtonsStackViewCollection()
         firstBackButton.isHidden = true
         firstBackButton.isEnabled  = false
     }
@@ -154,7 +146,7 @@ class CreatePassController: UIViewController {
             secondBackButton.isEnabled  = true
         case 9: // 10% discount on food option was tapped
             let discount: DiscountAccess = .onFood(percentage: 10)
-           test(privilege: "10% discount on food", areaAccess: nil, rideAccess: nil, discountAccess: discount)
+            test(privilege: "10% discount on food", areaAccess: nil, rideAccess: nil, discountAccess: discount)
         case 10: // 15% discount on food option was tapped
             print("aprete el 10 q es el 15 % on food?")
             let discount: DiscountAccess = .onFood(percentage: 15)
@@ -171,6 +163,84 @@ class CreatePassController: UIViewController {
         case 14: // 10% discount on merchandise option was tapped
             let discount: DiscountAccess = .onMarchandise(percentage: 10)
             test(privilege: "10% discount on merchandise", areaAccess: nil, rideAccess: nil, discountAccess: discount)
+        default:
+            break
+        }
+        
+    }
+    
+    func test(privilege: String, areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
+        
+        switch typeOfEntrant {
+        case "Child", "Classic", "SeniorGuest", "VIP", "SeassonPass":
+            if let message = guest.initialSwipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess){
+                testArea.text = "\(message)"
+            }
+            else {
+                let permission = self.guest.permission
+                print(permission)
+                switch permission {
+                case .granted( _, let message):
+                    if message != nil {
+                        testArea.text = "\(privilege): access allowed"
+                    }
+                case .denied( _, let message):
+                    if message != nil {
+                        testArea.text = "\(privilege): access denied"
+                    }
+                }
+            }
+        case "Food", "Ride", "Maintenance", "SeniorManager", "General":
+            hourlyEmployee.swipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess)
+            let permission = self.hourlyEmployee.permission
+            print(permission)
+            switch permission {
+            case .granted( _, let message):
+                if message != nil {
+                    testArea.text = "\(privilege): access allowed"
+                    audio.playAccessGrantedSound()
+                }
+            case .denied( _, let message):
+                if message != nil {
+                    testArea.text = "\(privilege): access denied"
+                    audio.playAccessDeniedSound()
+                }
+            }
+            
+        case "Contractor":
+            contractEmployee.swipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess)
+            let permission = self.contractEmployee.permission
+            print(permission)
+            switch permission {
+            case .granted( _, let message):
+                if message != nil {
+                    testArea.text = "\(privilege): access allowed"
+                    audio.playAccessGrantedSound()
+                }
+            case .denied( _, let message):
+                if message != nil {
+                    testArea.text = "\(privilege): access denied"
+                    audio.playAccessDeniedSound()
+                }
+            }
+            
+        case "Vendor":
+            vendor.swipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess)
+            let permission = self.vendor.permission
+            print(permission)
+            switch permission {
+            case .granted( _, let message):
+                if message != nil {
+                    testArea.text = "\(privilege): access allowed"
+                    audio.playAccessGrantedSound()
+                }
+            case .denied( _, let message):
+                if message != nil {
+                    testArea.text = "\(privilege): access denied"
+                    audio.playAccessDeniedSound()
+                }
+            }
+            
         default:
             break
         }
@@ -264,7 +334,7 @@ class CreatePassController: UIViewController {
             }
         }
     }
-
+    
     func convertToStringDiscountAccessArray(discountAccessArray: [DiscountAccess]){
         for item in discountAccessArray {
             switch item {
@@ -315,7 +385,7 @@ class CreatePassController: UIViewController {
         
         uiComponents.createInterfaceForCardPassLabels(areaAccessArray: areaAccessStringArray, rideAccessArray: rideAccessStringArray, discountAccessArray: discountAccessStringArray)
         addLabelToStackView(uiComponents.totalPrivilegesArray)
-            print("privilegios \(uiComponents.totalPrivilegesArray)")
+        print("privilegios \(uiComponents.totalPrivilegesArray)")
             
         case "Contractor":
             if let firstName = contractEmployee.firstName as String!, let lastName = contractEmployee.lastName as String! {
@@ -356,89 +426,6 @@ class CreatePassController: UIViewController {
         default:
             break
         }
-
-    }
-    
-    
-    func test(privilege: String, areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
-        
-        switch typeOfEntrant {
-        case "Child", "Classic", "SeniorGuest", "VIP", "SeassonPass":
-            
-            
-            if let message = guest.initialSwipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess){
-                testArea.text = "\(message)"
-            }
-            else {
-            let permission = self.guest.permission
-            print(permission)
-            switch permission {
-            case .granted( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access allowed"
-                }
-            case .denied( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access denied"
-                }
-                }
-        }
-        case "Food", "Ride", "Maintenance", "SeniorManager", "General":
-            hourlyEmployee.swipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess)
-            let permission = self.hourlyEmployee.permission
-            print(permission)
-            switch permission {
-            case .granted( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access allowed"
-                    audio.playAccessGrantedSound()
-                }
-            case .denied( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access denied"
-                    audio.playAccessDeniedSound()
-                }
-            }
-            
-        case "Contractor":
-            contractEmployee.swipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess)
-            let permission = self.contractEmployee.permission
-            print(permission)
-            switch permission {
-            case .granted( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access allowed"
-                    audio.playAccessGrantedSound()
-                }
-            case .denied( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access denied"
-                    audio.playAccessDeniedSound()
-                }
-            }
-            
-        case "Vendor":
-            vendor.swipe(areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess)
-            let permission = self.vendor.permission
-            print(permission)
-            switch permission {
-            case .granted( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access allowed"
-                    audio.playAccessGrantedSound()
-                }
-            case .denied( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access denied"
-                    audio.playAccessDeniedSound()
-                }
-            }
-            
-        default:
-            break
-        }
         
     }
-    
-   
 }

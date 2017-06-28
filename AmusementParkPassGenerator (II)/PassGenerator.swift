@@ -83,6 +83,9 @@ enum EntrantDataError: Error {
     case missingState(description: String)
     case missingZipCode(description: String)
     case overFiveYearsOldError(description: String)
+    case dateFormatError(description: String)
+    case itemShouldBeNUmerical(description: String)
+    case incorrectLengthOfString(description: String)
     
 }
 
@@ -135,30 +138,27 @@ class Employee {
     init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: Date?, type: EmployeeType) throws {
         
         if firstName == "" {
-            throw EntrantDataError.missingName(description: "Employee name is required")
-            
+            throw EntrantDataError.missingName(description: "Name is required")
         }
         
         if lastName == ""  {
-            throw EntrantDataError.missingLastName(description: "Employee lastname is required")
-            
+            throw EntrantDataError.missingLastName(description: "Lastname is required")
         }
 
         if streetAddress == ""  {
-            throw EntrantDataError.missingStreetAddress(description: "Employee Street Address is required")
-            
+            throw EntrantDataError.missingStreetAddress(description: "Street Address is required")
         }
+        
         if city == ""  {
-            throw EntrantDataError.missingCity(description: "Employee city is required")
-            
+            throw EntrantDataError.missingCity(description: "City is required")
         }
+        
         if state == ""  {
-            throw EntrantDataError.missingState(description: "Employee state is required")
-            
+            throw EntrantDataError.missingState(description: "State is required")
         }
+        
         if zipCode == ""  {
-            throw EntrantDataError.missingZipCode(description: "Employee zipcode is required")
-            
+            throw EntrantDataError.missingZipCode(description: "Zipcode is required")
         }
 
         self.firstName = firstName
@@ -172,8 +172,6 @@ class Employee {
         self.type = type
         
     }
-    
-    
 }
 
 class HourlyEmployee: Employee, Accessable, Swipeable {
@@ -514,9 +512,12 @@ class Guest: Accessable, Swipeable {
     
     init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: Date?, type: GuestType) throws {
         
+        
+        
+        
         if type == GuestType.freeChild {
             guard let dateOfBirth = dateOfBirth else {
-                throw EntrantDataError.missingBirthday(description: "Date of birthday required")
+                throw EntrantDataError.missingBirthday(description: "Date of birthday is required")
             }
             
             let date = Date()
@@ -533,45 +534,45 @@ class Guest: Accessable, Swipeable {
         
         if type == GuestType.senior {
             if firstName == "" {
-                throw EntrantDataError.missingName(description: "Senior guest name is required")
+                throw EntrantDataError.missingName(description: "Name is required")
                 
             }
             
             if lastName == ""  {
-                throw EntrantDataError.missingLastName(description: "Senior guest lastname is required")
+                throw EntrantDataError.missingLastName(description: "Lastname is required")
                 
             }
             
             if dateOfBirth == nil {
-                throw EntrantDataError.missingBirthday(description: "Senior guest date of birth is missing")
+                throw EntrantDataError.missingBirthday(description: "Date of birthday is required")
             }
         }
         
         if type == GuestType.seassonPass {
             if firstName == "" {
-                throw EntrantDataError.missingName(description: "Seasson Pass guest name is required")
+                throw EntrantDataError.missingName(description: "Name is required")
                 
             }
             
             if lastName == ""  {
-                throw EntrantDataError.missingLastName(description: "Seasson Pass guest lastname is required")
+                throw EntrantDataError.missingLastName(description: "Lastname is required")
                 
             }
             
             if streetAddress == ""  {
-                throw EntrantDataError.missingStreetAddress(description: "Seasson Pass guest Street Address is required")
+                throw EntrantDataError.missingStreetAddress(description: "Street Address is required")
                 
             }
             if city == ""  {
-                throw EntrantDataError.missingCity(description: "Seasson Pass guest city is required")
+                throw EntrantDataError.missingCity(description: "City is required")
                 
             }
             if state == ""  {
-                throw EntrantDataError.missingState(description: "Seasson Pass guest state is required")
+                throw EntrantDataError.missingState(description: "State is required")
                 
             }
             if zipCode == ""  {
-                throw EntrantDataError.missingZipCode(description: "Seasson Pass guest zipcode is required")
+                throw EntrantDataError.missingZipCode(description: "Zipcode is required")
                 
             }
 
@@ -812,16 +813,15 @@ class Vendor: Accessable, Swipeable {
     init(firstName: String?, lastName: String?, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: Date?, dateOfVisit: Date?, vendorCompany: String ) throws {
         
             if firstName == "" || firstName == nil {
-                throw EntrantDataError.missingName(description: "Vendor name is required")
+                throw EntrantDataError.missingName(description: "Name is required")
             }
             
             if lastName == "" || lastName == nil {
-                throw EntrantDataError.missingLastName(description: "Vendor lastname is required")
-                
+                throw EntrantDataError.missingLastName(description: "Lastname is required")
             }
         
             if dateOfBirth == nil {
-                throw EntrantDataError.missingBirthday(description: "Vendor date of birth is missing")
+                throw EntrantDataError.missingBirthday(description: "Date of birthday is required")
             }
         
             if dateOfVisit == nil {
@@ -989,7 +989,6 @@ extension Swipeable {
                     contains = true
                 }
             }
-                
             else {
                 if let discount = merchDiscount {
                     if discountAccessArrayCopy[index] == DiscountAccess.onMarchandise(percentage: discount){
@@ -998,10 +997,7 @@ extension Swipeable {
                 }
             }
             index += 1
-            
-            
         }
         return contains
     }
-
 }

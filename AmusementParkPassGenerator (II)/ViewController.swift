@@ -473,6 +473,7 @@ class ViewController: UIViewController  {
             case "SeniorManager": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .manager)
             access = hourlyEmployee.generateAccessByEntrantType()
             case "General": print("case general")
+            print("first name \(firstName)")
             try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .manager)
             case "Assistant": break
                 
@@ -483,22 +484,37 @@ class ViewController: UIViewController  {
                 access = vendor.generateAccessByEntrantType()
             default: break
             }
-        } catch EntrantDataError.missingName(description: "Missing Name") {
-            print("missing name")
-        } catch EntrantDataError.missingLastName(description: "Missing Lastname"){
-            print("missing lastname")
-        } catch EntrantDataError.missingBirthday(description: "Missing birthday") {
-            print("missing birthday")
-        } catch EntrantDataError.missingDateOfVisit(description: "Missing day of visit"){
-            print("missing date of visit")
-        } catch EntrantDataError.missingVendorCompany(description: "Missing vendor company"){
-            print("missing vendor company")
-        } catch EntrantDataError.missingCity(description: "Missing city") {
-            print("missing city")
-        } catch {
-            print("otros errores")
+        } catch EntrantDataError.missingName(description: "Name is required") {
+            createAlert(with: "Name is required")
+        } catch EntrantDataError.missingLastName(description: "Lastname is required"){
+            createAlert(with: "Lastname is required")
+        } catch EntrantDataError.missingBirthday(description: "Date of birthday is required") {
+            createAlert(with: "Date of birthday required")
+        } catch EntrantDataError.missingDateOfVisit(description: "Vendor date of visit is missing"){
+            createAlert(with: "Vendor date of visit is missing")
+        } catch EntrantDataError.missingVendorCompany(description: "Vendor company is missing"){
+            createAlert(with: "Vendor company is missing")
+        } catch EntrantDataError.missingCity(description: "City is required") {
+            createAlert(with: "City is required")
+        } catch EntrantDataError.missingStreetAddress(description: "Street Address is required"){
+            createAlert(with: "Street Address is required")
+        } catch EntrantDataError.missingState(description: "State is required"){
+            createAlert(with: "State is required")
+        } catch EntrantDataError.missingZipCode(description: "Zipcode is required"){
+            createAlert(with: "Zipcode is required")
+        } catch EntrantDataError.overFiveYearsOldError(description: "Free child must be under 5 years old"){
+            createAlert(with: "Free child must be under 5 years old")
+        }
+        catch {
+            fatalError()
         }
         
+    }
+    
+    func createAlert(with message: String){
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

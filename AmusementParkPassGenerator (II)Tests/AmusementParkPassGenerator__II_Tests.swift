@@ -224,7 +224,11 @@ class AmusementParkPassGenerator__II_Tests: XCTestCase {
                 XCTAssert(access.rideAccess?[0] == RideAccess.allRides)
                 XCTAssert((access.discountAccess?[0])! == DiscountAccess.onFood(percentage: 15))
                 XCTAssert((access.discountAccess?[1])! == DiscountAccess.onMarchandise(percentage: 25))
+                
+                default: break
                 }
+                
+                
                 
                 
             } catch let error {
@@ -251,6 +255,7 @@ class AmusementParkPassGenerator__II_Tests: XCTestCase {
                 case .freeChild:    XCTAssert(access.areaAccess?[0] == AreaAccess.amusementAreas)
                 XCTAssert(access.rideAccess?[0] == RideAccess.allRides)
                     
+                default: break
                 }
                 
                 
@@ -271,7 +276,7 @@ class AmusementParkPassGenerator__II_Tests: XCTestCase {
                 
                 let access = Access(areaAccess: PlugValues.entrantTest.areaAccess, rideAccess: PlugValues.entrantTest.rideAccess, discountAccess: PlugValues.entrantTest.discountAccess)
                 hourlyEmployee.access = access
-                hourlyEmployee.swipe()
+             //   hourlyEmployee.swipe()
                 let permission = hourlyEmployee.permission
                 
                 switch permission {
@@ -299,7 +304,7 @@ class AmusementParkPassGenerator__II_Tests: XCTestCase {
                 let access = Access(areaAccess: PlugValues.entrantTest.areaAccess, rideAccess: PlugValues.entrantTest.rideAccess, discountAccess: PlugValues.entrantTest.discountAccess)
                 guest.access = access
                 //  guest.initialSwipe()
-                guest.swipe()
+             //   guest.swipe()
                 let permission = guest.permission
                 
                 switch permission {
