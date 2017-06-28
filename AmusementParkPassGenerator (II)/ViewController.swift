@@ -479,6 +479,7 @@ class ViewController: UIViewController  {
             case "General": print("case general")
             print("first name \(firstName)")
             try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .manager)
+                access = hourlyEmployee.generateAccessByEntrantType()
             case "Assistant": break
                 
             case "Contractor": try contractEmployee = ContractEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .nonType, projectID: projectID)
