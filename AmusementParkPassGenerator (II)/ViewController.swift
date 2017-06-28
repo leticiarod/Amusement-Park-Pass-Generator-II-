@@ -24,26 +24,26 @@ class ViewController: UIViewController  {
     @IBOutlet weak var submenuStackView: UIStackView!
     
     @IBOutlet var uiViewCollection: [UIView]!{
-         didSet {
+        didSet {
             
             uiViewCollection.forEach{
                 $0.layer.borderWidth = 1
                 $0.layer.borderColor = borderColorDisabledView.cgColor
                 $0.isUserInteractionEnabled = false           }
-         }
+        }
     }
     
     
     @IBOutlet var textFieldCollection: [UITextField]!{
         didSet {
-           
+            
             textFieldCollection.forEach{
                 $0.layer.borderWidth = 1
                 $0.layer.borderColor = borderColorDisabledTextField.cgColor
                 $0.layer.cornerRadius = 5
                 $0.backgroundColor = backgroundColorDisabledTextField
             }
-
+            
         }
     }
     
@@ -78,7 +78,7 @@ class ViewController: UIViewController  {
         initViews()
         disableButtons()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -158,7 +158,7 @@ class ViewController: UIViewController  {
         }
         index += 1
         // Project
-         textField = textFieldCollection[index]
+        textField = textFieldCollection[index]
         textField.text = entrantByType.projectID
         if let p = entrantByType.projectID {
             projectID = p
@@ -180,7 +180,7 @@ class ViewController: UIViewController  {
         index += 1
         
         // Company
-         textField = textFieldCollection[index]
+        textField = textFieldCollection[index]
         textField.text = entrantByType.vendorCompany
         if let c = entrantByType.vendorCompany {
             vendorCompany = c
@@ -219,70 +219,70 @@ class ViewController: UIViewController  {
         
     }
     
-    //
+    // ButtonClicked is the targeted method, it is called when a button of the stack view menu is tapped.
     func buttonClicked(sender: UIButton)
     {
         switch sender.tag {
         case 0: // Child option was tapped
-                print("Child")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "Child"
+            print("Child")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "Child"
         case 1: // Classic option was tapped
-                print("classic")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "Classic"
+            print("classic")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "Classic"
         case 2: // Senior option was tapped
-                print("Senior")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "SeniorGuest"
+            print("Senior")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "SeniorGuest"
         case 3: // VIP option was tapped
-                print("VIP")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "VIP"
+            print("VIP")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "VIP"
         case 4: // Seasson Pass option was tapped
-                print("seasson pass")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "SeassonPass"
+            print("seasson pass")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "SeassonPass"
         case 5: // Food Employee option was tapped
-                print("food")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "Food"
+            print("food")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "Food"
         case 6: // Ride Employee option was tapped
-                print("ride")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "Ride"
+            print("ride")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "Ride"
         case 7: // Maintenance Employee option was tapped
-                print("maintenance")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "Maintenance"
+            print("maintenance")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "Maintenance"
         case 8: // Senior Manager option was tapped
-                print("senior ")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "SeniorManager"
+            print("senior ")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "SeniorManager"
         case 9: // General Manager option was tapped
-                print("general")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "General"
-         case 10: // Contractor option was tapped
-                print("contractor")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "Contractor"
+            print("general")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "General"
+        case 10: // Contractor option was tapped
+            print("contractor")
+            cleanTextFields()
+            enableForm()
+            subEntrantTypeSelected = "Contractor"
         case 11: // Vendor option was tapped
-                print("vendor")
-                cleanTextFields()
-                enableVendorForm()
-                subEntrantTypeSelected = "Vendor"
+            print("vendor")
+            cleanTextFields()
+            enableVendorForm()
+            subEntrantTypeSelected = "Vendor"
         default:
             break
         }
@@ -303,20 +303,20 @@ class ViewController: UIViewController  {
             default:
                 break
             }
-           createPassController.typeOfEntrant = subEntrantTypeSelected
+            createPassController.typeOfEntrant = subEntrantTypeSelected
         }
     }
-
+    
     // MARK: Helper Methods
     
-    //
+    //  Given an array of buttons, this buttons are added to the stack view menu.
     func addSubViewToStackView(_ array: [UIButton]){
         for button in array {
             submenuStackView.addArrangedSubview(button)
         }
     }
     
-    //
+    // Show the buttons added to the stack view menu.
     func enableViewsInStackView(_ array: [UIButton]){
         for button in array {
             button.isHidden = false
@@ -324,7 +324,7 @@ class ViewController: UIViewController  {
         }
     }
     
-    //
+    // Hide the buttons added to the stack view menu.
     func disableViewsInStackView(_ array: [UIButton]){
         for button in array {
             button.isHidden = true
@@ -332,7 +332,7 @@ class ViewController: UIViewController  {
         }
     }
     
-    //
+    // Initialize the stack view menu by adding all the buttons corresponding to each type of Entrant.
     func initViews(){
         addSubViewToStackView(uiComponents.guestButtonsArray)
         addSubViewToStackView(uiComponents.employeeButtonsArray)
@@ -347,7 +347,9 @@ class ViewController: UIViewController  {
         addTarget()
     }
     
+    // Add target to the buttons created programmatically for the stack view menu.
     func addTarget() {
+        // indexTag is used to identify each button created programmatically
         var indexTag = 0
         for button in uiComponents.buttonsArray{
             button.tag = indexTag
@@ -356,12 +358,13 @@ class ViewController: UIViewController  {
         }
     }
     
+    // Disable Form, it "paints" all textfields, views, buttons and labels in grey color.
     func disabledForm(){
-    
+        
         uiViewCollection.forEach{
             $0.isUserInteractionEnabled = false
         }
-
+        
         textFieldCollection.forEach{
             $0.layer.borderColor = borderColorDisabledTextField.cgColor
             $0.backgroundColor = backgroundColorDisabledTextField
@@ -374,14 +377,16 @@ class ViewController: UIViewController  {
         
         disableButtons()
         submenuStackView.isUserInteractionEnabled = true
-
+        
     }
     
+    // Paints "buttons" in grey color
     func disableButtons(){
         generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
         populateDataButton.setTitleColor(textColorDisabledLabel, for: .normal)
     }
     
+    // Enable Form (get rid of the grey parts) for all type of Entrant (Except Vendor)
     func enableForm(){
         for textField in textFieldCollection{
             if textField.tag != 2 && textField.tag != 3 && textField.tag != 6 {
@@ -397,9 +402,9 @@ class ViewController: UIViewController  {
                 }
             }
             else {
-            if label.text != "Project #" && label.text != "Company" {
-                label.textColor = textColorEnabledLabel
-            }
+                if label.text != "Project #" && label.text != "Company" {
+                    label.textColor = textColorEnabledLabel
+                }
             }
         }
         
@@ -409,9 +414,10 @@ class ViewController: UIViewController  {
         generatePassButton.setTitleColor(.white, for: .normal)
         populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
         
-       // submenuStackView.isUserInteractionEnabled = false
+        // submenuStackView.isUserInteractionEnabled = false
     }
-
+    
+    // Enable Form (get rid of the grey parts) for a type of Entrant = Vendor
     func enableVendorForm(){
         for textField in textFieldCollection{
             if textField.tag != 2 && textField.tag != 3 {
@@ -423,7 +429,7 @@ class ViewController: UIViewController  {
         for label in labelCollection{
             if /*label.text != "SSN" &&*/ label.text != "Project #" {
                 label.textColor = textColorEnabledLabel
-           }
+            }
         }
         
         for uiview in uiViewCollection {
@@ -432,17 +438,19 @@ class ViewController: UIViewController  {
         generatePassButton.setTitleColor(.white, for: .normal)
         populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
         
-      //  submenuStackView.isUserInteractionEnabled = false
+        //  submenuStackView.isUserInteractionEnabled = false
     }
     
+    // Set empty string to the textfields in the form
     func cleanTextFields(){
         textFieldCollection.forEach{
-           $0.text = ""
+            $0.text = ""
         }
     }
     
-    //
+    // Create object an Entrant Object given the the subtype of entrant (Child, contractor, food services Employee) selected in the submenu
     func createEntrantObjectByType() {
+       // generatePassButton.isEnabled = true
         do {
             
             switch subEntrantTypeSelected {
@@ -461,7 +469,7 @@ class ViewController: UIViewController  {
             case "Food":
                 
                 try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .foodServices)
-            access = hourlyEmployee.generateAccessByEntrantType()
+                access = hourlyEmployee.generateAccessByEntrantType()
             case "Ride": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .rideServices)
             access = hourlyEmployee.generateAccessByEntrantType()
             case "Maintenance": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .maintenance)
@@ -481,6 +489,8 @@ class ViewController: UIViewController  {
             default: break
             }
         } catch EntrantDataError.missingName(description: "Name is required") {
+            //disable generatePassButton until populate data button be pressed again
+            //generatePassButton.isEnabled = false
             createAlert(with: "Name is required")
         } catch EntrantDataError.missingLastName(description: "Lastname is required"){
             createAlert(with: "Lastname is required")
@@ -513,6 +523,7 @@ class ViewController: UIViewController  {
         
     }
     
+    // Create an UIAlertController
     func createAlert(with message: String){
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))

@@ -37,8 +37,8 @@ struct Entrants {
         "Contractor" : Entrant(firstName: "Claudia", lastName: "Yates", streetAddress: "26 de Marzo", city: "Montevideo", state: "Montevideo", zipCode: "11800", socialSecurityNumber: nil, dateOfBirth: "01-01-1968", dateOfVisit: nil, vendorCompany: nil, projectID: "1001"),
         "Vendor" : Entrant(firstName: "Francis", lastName: "Underwood", streetAddress: "Avenida Brasil", city: "Montevideo", state: "Montevideo", zipCode: "11700", socialSecurityNumber: nil, dateOfBirth: "01-01-1968", dateOfVisit: "28-06-2017", vendorCompany: "NW Electrical", projectID: nil)
         ]
-    //-123456789.0
 
+    // Returns the Entrant given the Type of Entrant.
     func getEntrantByType(_ type: String) -> Entrant {
         
         var entrantItem: Entrant? = nil

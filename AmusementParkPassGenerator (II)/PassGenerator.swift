@@ -1044,7 +1044,7 @@ class Vendor: Accessable, Swipeable {
 
 }
 
-// Protocols
+// MARK: Protocols
 
 protocol Accessable {
     var access: Access {get set}
@@ -1084,6 +1084,8 @@ extension Swipeable {
         return contains
     }
 }
+
+// MARK: Helper Methods
 
 func inputValidation(firstName: String, lastName: String, streetAddress: String, city: String, state: String, zipCode: String, socialSecurityNumber: String?) throws{
     

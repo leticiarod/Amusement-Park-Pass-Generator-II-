@@ -44,15 +44,12 @@ class CreatePassController: UIViewController {
         secondBackButton.isHidden = true
         firstBackButton.isEnabled  = false
         secondBackButton.isEnabled  = false
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
     @IBAction func areaAccessButtonPressed(_ sender: Any) {
         
@@ -106,6 +103,7 @@ class CreatePassController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    // ButtonClicked is the targeted method, it is called when a button of the stack view test area is tapped.
     func buttonClicked(sender: UIButton)
     {
         switch sender.tag {
@@ -171,6 +169,7 @@ class CreatePassController: UIViewController {
         
     }
     
+    // This method calls the Swipe method in PassGenerator file corresponding to the Entrant Type
     func test(privilege: String, areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
         
         switch typeOfEntrant {
@@ -253,6 +252,7 @@ class CreatePassController: UIViewController {
     
     // MARK: - Helper Methods
     
+    // Initialize the stack view test area by adding all the buttons corresponding to each privilege to be tested.
     func initViews(){
         addSubViewToStackView(uiComponents.areaAccessButtonsArray)
         addSubViewToStackView(uiComponents.rideAccessButtonsArray)
@@ -267,19 +267,21 @@ class CreatePassController: UIViewController {
         addTarget()
     }
     
+    // Given an array of buttons, this buttons are added to the stack view test area.
     func addSubViewToStackView(_ array: [UIButton]){
         for button in array {
             testItemsStackView.addArrangedSubview(button)
         }
     }
     
+    // Given an array of Labels, this labels are added to the stack view containing the privileges given to the Entrant in de "Card" area.
     func addLabelToStackView(_ array: [UILabel]){
         for label in array {
             infoPassStackView.addArrangedSubview(label)
         }
     }
     
-    //
+    // Show the buttons added to the stack view  test area
     func enableViewsInStackView(_ array: [UIButton]){
         for button in array {
             button.isHidden = false
@@ -287,7 +289,7 @@ class CreatePassController: UIViewController {
         }
     }
     
-    //
+    // Hide the buttons added to the stack view test area
     func disableViewsInStackView(_ array: [UIButton]){
         for button in array {
             button.isHidden = true
@@ -295,6 +297,7 @@ class CreatePassController: UIViewController {
         }
     }
     
+    // Add target to the buttons created programmatically for the stack view test area.
     func addTarget() {
         var indexTag = 0
         for button in uiComponents.buttonsForTestingArray{
@@ -304,6 +307,7 @@ class CreatePassController: UIViewController {
         }
     }
     
+    // Hide the buttons added to the stack view test area
     func disableTestButtonsStackViewCollection(){
         self.testButtonsStackViewCollection.forEach {
             $0.isHidden = true
@@ -311,6 +315,7 @@ class CreatePassController: UIViewController {
         }
     }
     
+    // Show the buttons added to the stack view test area
     func enableTestButtonsStackViewCollection(){
         self.testButtonsStackViewCollection.forEach {
             $0.isHidden = false
@@ -318,6 +323,7 @@ class CreatePassController: UIViewController {
         }
     }
     
+    // Given an array of items of type AreaAccess, converts all the items into Strings, to manipulate
     func convertToStringAreaAccessArray(areaAccessArray: [AreaAccess]){
         for item in areaAccessArray {
             switch item {
@@ -330,6 +336,7 @@ class CreatePassController: UIViewController {
         }
     }
     
+    // Given an array of items of type RideAccess, converts all the items into Strings, to manipulate
     func convertToStringRideAccessArray(rideAccessArray: [RideAccess]){
         for item in rideAccessArray {
             switch item {
@@ -339,6 +346,7 @@ class CreatePassController: UIViewController {
         }
     }
     
+    // Given an array of items of type DiscountAccess, converts all the items into Strings, to manipulate
     func convertToStringDiscountAccessArray(discountAccessArray: [DiscountAccess]){
         for item in discountAccessArray {
             switch item {
@@ -353,6 +361,7 @@ class CreatePassController: UIViewController {
         }
     }
     
+    // Initialize all the privileges of the entrant in the card
     func initPassCardArea() {
         switch typeOfEntrant {
         case "Child", "Classic", "SeniorGuest", "VIP", "SeassonPass":

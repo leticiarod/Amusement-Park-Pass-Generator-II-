@@ -45,7 +45,7 @@ class UIComponents: NSObject {
     var buttonsForTestingArray: [UIButton] = Array()
     var totalPrivilegesArray: [UILabel] = Array()
     
-    //
+    // Create buttons corresponding to the entrant types to add to the stack view menu.
     func createInterfaceButtons() {
         for buttonTitle in self.guestButtonTitles {
             let button = createButtonForStackViewMenu(for: buttonTitle)
@@ -74,6 +74,7 @@ class UIComponents: NSObject {
         }
     }
     
+    // Create buttons corresponding to the privileges to add to the stack view test area.
     func createInterfaceForTestAreaButtons() {
         for buttonTitle in self.areaAccessButtonTitles {
             let button = createButtonForTestAreaStackView(for: buttonTitle)
@@ -104,7 +105,8 @@ class UIComponents: NSObject {
         }
         
     }
-    //
+    
+    // Create the button view with its corresponding design for the stack view menu
     func createButtonForStackViewMenu(for title: String) -> UIButton {
         
         let button = UIButton()
@@ -114,7 +116,7 @@ class UIComponents: NSObject {
         return button
     }
     
-    //
+    // Create the button view with its corresponding design for the stack view test area
     func createButtonForTestAreaStackView(for title: String) -> UIButton {
         
         let button = UIButton()
@@ -126,6 +128,7 @@ class UIComponents: NSObject {
         return button
     }
     
+    // Create labels corresponding to the privileges of an entrant type to add to the stack view "Card" section.
     func createInterfaceForCardPassLabels(areaAccessArray: [String], rideAccessArray: [String], discountAccessArray: [String]) {
         for privilege in areaAccessArray {
             let label = createLabelForPassCardAreaStackView(for: privilege)
@@ -142,8 +145,7 @@ class UIComponents: NSObject {
         }
     }
     
-    
-    //
+    // Create the button view with its corresponding design for the stack view "Card" section
     func createLabelForPassCardAreaStackView(for title: String) -> UILabel {
         let label = UILabel()
         let bulletPoint = "\u{2022}"
