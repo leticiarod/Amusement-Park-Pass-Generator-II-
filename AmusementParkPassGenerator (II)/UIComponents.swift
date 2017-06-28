@@ -17,7 +17,7 @@ class UIComponents: NSObject {
     
     let guestButtonTitles = ["Child", "Classic", "Senior", "VIP", "Seasson Pass"]
     let employeeButtonTitles = ["Food Services", "Ride Services", "Maintenance"]
-    let managerButtonTitles = ["Senior", "General", "Assistant"]
+    let managerButtonTitles = ["Senior", "General"]
     let contractorButtonTitles = ["Contractor"]
     let vendorButtonTitles = ["Vendor"]
     

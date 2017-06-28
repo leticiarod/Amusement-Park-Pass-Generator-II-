@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class CreatePassController: UIViewController {
     
@@ -38,11 +39,12 @@ class CreatePassController: UIViewController {
         uiComponents.createInterfaceForTestAreaButtons()
         initViews()
         initPassCardArea()
+        audio.loadGameSounds()
         firstBackButton.isHidden = true
         secondBackButton.isHidden = true
         firstBackButton.isEnabled  = false
         secondBackButton.isEnabled  = false
-        audio.loadGameSounds()
+        
         
     }
     
@@ -181,12 +183,14 @@ class CreatePassController: UIViewController {
                 print(permission)
                 switch permission {
                 case .granted( _, let message):
-                    if message != nil {
-                        testArea.text = "\(privilege): access allowed"
+                    if let message = message as String! {
+                        testArea.text = "\(privilege): access allowed \n\(message)"
+                        audio.playAccessGrantedSound()
                     }
                 case .denied( _, let message):
                     if message != nil {
                         testArea.text = "\(privilege): access denied"
+                        audio.playAccessDeniedSound()
                     }
                 }
             }
@@ -196,8 +200,8 @@ class CreatePassController: UIViewController {
             print(permission)
             switch permission {
             case .granted( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access allowed"
+                if let message = message as String! {
+                    testArea.text = "\(privilege): access allowed \n\(message)"
                     audio.playAccessGrantedSound()
                 }
             case .denied( _, let message):
@@ -213,8 +217,8 @@ class CreatePassController: UIViewController {
             print(permission)
             switch permission {
             case .granted( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access allowed"
+                if let message = message as String! {
+                    testArea.text = "\(privilege): access allowed \n\(message)"
                     audio.playAccessGrantedSound()
                 }
             case .denied( _, let message):
@@ -230,8 +234,8 @@ class CreatePassController: UIViewController {
             print(permission)
             switch permission {
             case .granted( _, let message):
-                if message != nil {
-                    testArea.text = "\(privilege): access allowed"
+                if let message = message as String! {
+                    testArea.text = "\(privilege): access allowed \n\(message)"
                     audio.playAccessGrantedSound()
                 }
             case .denied( _, let message):

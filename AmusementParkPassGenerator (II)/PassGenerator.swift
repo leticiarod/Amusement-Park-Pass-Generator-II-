@@ -64,11 +64,11 @@ enum DiscountAccess {
             
         case (let .onMarchandise(percentage1), let .onMarchandise(percentage2)):
             return percentage1 == percentage2
-
-            default: return false // Cover all cases
-            }
+            
+        default: return false // Cover all cases
         }
     }
+}
 
 // Errors
 
@@ -109,7 +109,7 @@ struct Access {
         self.discountAccess = discountAccess
         
     }
-
+    
 }
 
 class Employee {
@@ -120,7 +120,7 @@ class Employee {
     let state: String
     let zipCode: String
     let socialSecurityNumber: String?
-    let dateOfBirth: Date?
+    let dateOfBirth: String?
     let type: EmployeeType
     
     init(){
@@ -135,7 +135,7 @@ class Employee {
         self.type = .nonType
     }
     
-    init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: Date?, type: EmployeeType) throws {
+    init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: String?, type: EmployeeType) throws {
         
         if firstName == "" {
             throw EntrantDataError.missingName(description: "Name is required")
@@ -144,7 +144,7 @@ class Employee {
         if lastName == ""  {
             throw EntrantDataError.missingLastName(description: "Lastname is required")
         }
-
+        
         if streetAddress == ""  {
             throw EntrantDataError.missingStreetAddress(description: "Street Address is required")
         }
@@ -160,7 +160,16 @@ class Employee {
         if zipCode == ""  {
             throw EntrantDataError.missingZipCode(description: "Zipcode is required")
         }
-
+        
+        let validZipCodeNumber = Int(zipCode)
+        
+        if validZipCodeNumber == nil {
+            throw EntrantDataError.itemShouldBeNUmerical(description: "Zipcode must be a number")
+        }
+        
+        // Input validation to ensure that all text entries are of “reasonable” length
+        try inputValidation(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: socialSecurityNumber)
+        
         self.firstName = firstName
         self.lastName = lastName
         self.streetAddress = streetAddress
@@ -178,13 +187,13 @@ class HourlyEmployee: Employee, Accessable, Swipeable {
     var access: Access
     var permission: Permission
     
-    override init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: Date?, type: EmployeeType) throws {
+    override init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: String?, type: EmployeeType) throws {
         access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
         permission = .denied(description: "Access Denied", message: nil)
         try super.init(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: socialSecurityNumber, dateOfBirth: dateOfBirth, type: type)
         
-        }
- 
+    }
+    
     override init(){
         self.access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
         self.permission = .denied(description: "Access Denied", message: nil)
@@ -199,20 +208,20 @@ class HourlyEmployee: Employee, Accessable, Swipeable {
         case .foodServices:
             
             areaAccessArray.append(contentsOf: [.amusementAreas,.kitchenAreas])
-                            rideAccessArray.append(contentsOf: [.allRides])
+            rideAccessArray.append(contentsOf: [.allRides])
             discountAccessArray.append(contentsOf: [.onFood(percentage: 15), .onMarchandise(percentage: 25)])
         case .rideServices: areaAccessArray.append(contentsOf: [.amusementAreas,.rideControlAreas])
         rideAccessArray.append(contentsOf: [.allRides])
         discountAccessArray.append(contentsOf: [.onFood(percentage: 15), .onMarchandise(percentage: 25)])
-
+            
         case .maintenance:  areaAccessArray.append(contentsOf: [.amusementAreas, .kitchenAreas, .rideControlAreas, .maintenanceAreas])
         rideAccessArray.append(contentsOf: [.allRides])
         discountAccessArray.append(contentsOf: [.onFood(percentage: 15), .onMarchandise(percentage: 25)])
-
+            
         case .manager: areaAccessArray.append(contentsOf: [.amusementAreas, .kitchenAreas, .rideControlAreas, .maintenanceAreas,.officeAreas])
         rideAccessArray.append(contentsOf: [.allRides])
         discountAccessArray.append(contentsOf: [.onFood(percentage: 25), .onMarchandise(percentage: 25)])
-
+            
         case .nonType: break
         }
         
@@ -229,108 +238,111 @@ class HourlyEmployee: Employee, Accessable, Swipeable {
         }
         
         if let areaAccess = areaAccess {
-        switch areaAccess {
-        case .amusementAreas: if let areaAccessArray = self.access.areaAccess{
-            if areaAccessArray.contains(AreaAccess.amusementAreas){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-        case .kitchenAreas: if let areaAccessArray = self.access.areaAccess{
-            if areaAccessArray.contains(AreaAccess.kitchenAreas){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-            
-        case .maintenanceAreas: if let areaAccessArray = self.access.areaAccess{
-            if areaAccessArray.contains(AreaAccess.maintenanceAreas){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-            
-        case .officeAreas: if let areaAccessArray = self.access.areaAccess{
-            if areaAccessArray.contains(AreaAccess.officeAreas){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-            
-        case .rideControlAreas: if let  areaAccessArray = self.access.areaAccess {
-            if areaAccessArray.contains(AreaAccess.rideControlAreas) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }}
-            
-        }
-    }
-    
-    if let rideAccess = rideAccess {
-        switch rideAccess {
-        case .allRides: if let rideAccessArray = self.access.rideAccess {
-            if rideAccessArray.contains(RideAccess.allRides){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-        case .skipAllRideLines: if let rideAccessArray = self.access.rideAccess {
-            if rideAccessArray.contains(RideAccess.skipAllRideLines){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
+            switch areaAccess {
+            case .amusementAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.amusementAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case .kitchenAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.kitchenAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .maintenanceAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.maintenanceAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .officeAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.officeAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .rideControlAreas: if let  areaAccessArray = self.access.areaAccess {
+                if areaAccessArray.contains(AreaAccess.rideControlAreas) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }}
+                
             }
         }
-    }
-    
-    if let discountAccess = discountAccess {
-        switch discountAccess {
-        case .onFood(percentage: 10) : if let discountAccessArray = self.access.discountAccess{
-            if contains(foodDiscount: 10, merchDiscount: nil, discountAccessArray: discountAccessArray) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-        case  .onFood(percentage: 15):
-            if let discountAccessArray = self.access.discountAccess{
-                if contains(foodDiscount: 15, merchDiscount: nil, discountAccessArray: discountAccessArray) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-            
-        case .onFood(percentage: 25): if let discountAccessArray = self.access.discountAccess{
-            if contains(foodDiscount: 25, merchDiscount: nil, discountAccessArray: discountAccessArray) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-            
-        case .onMarchandise(percentage: 20): if let discountAccessArray = self.access.discountAccess{
-            if contains(foodDiscount: nil, merchDiscount: 20, discountAccessArray: discountAccessArray) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-            
-        case .onMarchandise(percentage: 25):
-            
-            if let discountAccessArray = self.access.discountAccess{
-                if contains(foodDiscount: nil, merchDiscount: 25, discountAccessArray: discountAccessArray) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-            
-        case .onMarchandise(percentage: 10): if let discountAccessArray = self.access.discountAccess{
-            if contains(foodDiscount: nil, merchDiscount: 10, discountAccessArray: discountAccessArray) {
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-         default: break
-            
-        }
-    }
-}
-
-    func isBirthdayDay() -> Bool{
         
+        if let rideAccess = rideAccess {
+            switch rideAccess {
+            case .allRides: if let rideAccessArray = self.access.rideAccess {
+                if rideAccessArray.contains(RideAccess.allRides){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case .skipAllRideLines: if let rideAccessArray = self.access.rideAccess {
+                if rideAccessArray.contains(RideAccess.skipAllRideLines){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            }
+        }
+        
+        if let discountAccess = discountAccess {
+            switch discountAccess {
+            case .onFood(percentage: 10) : if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 10, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case  .onFood(percentage: 15):
+                if let discountAccessArray = self.access.discountAccess{
+                    if contains(foodDiscount: 15, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                        self.permission = .granted(description: "Access Granted !", message: message)
+                    }
+                }
+                
+            case .onFood(percentage: 25): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: 25, merchDiscount: nil, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onMarchandise(percentage: 20): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 20, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .onMarchandise(percentage: 25):
+                
+                if let discountAccessArray = self.access.discountAccess{
+                    if contains(foodDiscount: nil, merchDiscount: 25, discountAccessArray: discountAccessArray) {
+                        self.permission = .granted(description: "Access Granted !", message: message)
+                    }
+                }
+                
+            case .onMarchandise(percentage: 10): if let discountAccessArray = self.access.discountAccess{
+                if contains(foodDiscount: nil, merchDiscount: 10, discountAccessArray: discountAccessArray) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            default: break
+                
+            }
+        }
+    }
+    
+    func isBirthdayDay() -> Bool{
         let date = Date()
         let calendar = Calendar.current
         let currentDay = calendar.component(.day, from: date)
         let currentMonth = calendar.component(.month, from: date)
         
-        if let dateOfBirth = self.dateOfBirth{
-            let birthdayDay = calendar.component(.day, from: dateOfBirth)
-            let birthdayMonth = calendar.component(.month, from: dateOfBirth)
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "dd-MM-yyyy"
+        
+        if let dateString = dateOfBirth {
+            let dateOfBirth = dateFormatterGet.date(from: dateString)
+            let birthdayDay = calendar.component(.day, from: dateOfBirth!)
+            let birthdayMonth = calendar.component(.month, from: dateOfBirth!)
             if currentDay == birthdayDay && currentMonth == birthdayMonth{
                 return true
             }
@@ -341,8 +353,8 @@ class HourlyEmployee: Employee, Accessable, Swipeable {
         // otherwise
         return false
     }
-
-
+    
+    
 }
 
 class ContractEmployee: Employee, Accessable,Swipeable {
@@ -357,7 +369,7 @@ class ContractEmployee: Employee, Accessable,Swipeable {
         super.init()
     }
     
-     init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: Date?, type: EmployeeType, projectID: String) throws {
+    init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String?, dateOfBirth: String?, type: EmployeeType, projectID: String) throws {
         access = Access(areaAccess: [],rideAccess: [],discountAccess: [])
         permission = .denied(description: "Access Denied", message: nil)
         self.projectID = projectID
@@ -373,15 +385,15 @@ class ContractEmployee: Employee, Accessable,Swipeable {
         switch self.projectID {
         case "1001": areaAccessArray.append(contentsOf: [.amusementAreas,.rideControlAreas])
         case "1002": areaAccessArray.append(contentsOf: [.amusementAreas, .rideControlAreas, .maintenanceAreas])
-            case "1003": areaAccessArray.append(contentsOf: [.amusementAreas, .rideControlAreas, .kitchenAreas, .maintenanceAreas, .officeAreas])
-            case "2001": areaAccessArray.append(contentsOf: [.officeAreas])
-            case "2002": areaAccessArray.append(contentsOf: [.kitchenAreas, .maintenanceAreas])
+        case "1003": areaAccessArray.append(contentsOf: [.amusementAreas, .rideControlAreas, .kitchenAreas, .maintenanceAreas, .officeAreas])
+        case "2001": areaAccessArray.append(contentsOf: [.officeAreas])
+        case "2002": areaAccessArray.append(contentsOf: [.kitchenAreas, .maintenanceAreas])
         default: break
         }
         
         access = Access(areaAccess: areaAccessArray, rideAccess: rideAccessArray, discountAccess: discountAccessArray)
         return self.access
-
+        
     }
     
     func swipe(areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
@@ -492,7 +504,7 @@ class Guest: Accessable, Swipeable {
     let state: String?
     let zipCode: String?
     let socialSecurityNumber: String?
-    let dateOfBirth: Date?
+    let dateOfBirth: String?
     let type: GuestType
     var permission: Permission
     
@@ -510,8 +522,7 @@ class Guest: Accessable, Swipeable {
         permission = .denied(description: "Access Denied", message: "")
     }
     
-    init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: Date?, type: GuestType) throws {
-        
+    init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: String?, type: GuestType) throws {
         
         
         
@@ -519,34 +530,38 @@ class Guest: Accessable, Swipeable {
             guard let dateOfBirth = dateOfBirth else {
                 throw EntrantDataError.missingBirthday(description: "Date of birthday is required")
             }
-            
             let date = Date()
             let calendar = Calendar.current
             let currentYear = calendar.component(.year, from: date)
+            
+            let dateFormatterGet = DateFormatter()
+            dateFormatterGet.dateFormat = "dd-MM-yyyy"
+            
+            if let dateOfBirth = dateFormatterGet.date(from: dateOfBirth){
             let birthdayYear = calendar.component(.year, from: dateOfBirth)
             let kidAge = currentYear - birthdayYear
             
             if kidAge > 5 {
                 throw EntrantDataError.overFiveYearsOldError(description: "Free child must be under 5 years old")
             }
-            
+            }
         }
+        
         
         if type == GuestType.senior {
             if firstName == "" {
                 throw EntrantDataError.missingName(description: "Name is required")
-                
             }
             
             if lastName == ""  {
                 throw EntrantDataError.missingLastName(description: "Lastname is required")
                 
             }
-            
-            if dateOfBirth == nil {
+            guard let _ = dateOfBirth else {
                 throw EntrantDataError.missingBirthday(description: "Date of birthday is required")
             }
         }
+        
         
         if type == GuestType.seassonPass {
             if firstName == "" {
@@ -556,27 +571,46 @@ class Guest: Accessable, Swipeable {
             
             if lastName == ""  {
                 throw EntrantDataError.missingLastName(description: "Lastname is required")
-                
             }
             
             if streetAddress == ""  {
                 throw EntrantDataError.missingStreetAddress(description: "Street Address is required")
-                
             }
             if city == ""  {
                 throw EntrantDataError.missingCity(description: "City is required")
-                
             }
             if state == ""  {
                 throw EntrantDataError.missingState(description: "State is required")
-                
             }
             if zipCode == ""  {
                 throw EntrantDataError.missingZipCode(description: "Zipcode is required")
-                
             }
-
+            
+            
+            
         }
+        
+        // Input validation to ensure that all text entries are of “reasonable” length
+        
+        try inputValidation(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: socialSecurityNumber)
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "dd-mm-yyyy"
+        //let birthDate = String(describing: dateOfBirth)
+        
+        if let dateOfBirth = dateOfBirth as String!{
+        if dateFormatterGet.date(from: dateOfBirth) == nil {
+            throw EntrantDataError.dateFormatError(description: "Invalid date format")
+        }
+        }
+        if zipCode != "" {
+            let validZipCodeNumber = Int(zipCode)
+            
+            if validZipCodeNumber == nil {
+                throw EntrantDataError.itemShouldBeNUmerical(description: "Zipcode must be a number")
+            }
+            
+        }
+        
         
         self.firstName = firstName
         self.lastName = lastName
@@ -605,13 +639,13 @@ class Guest: Accessable, Swipeable {
             
         case .freeChild:  areaAccessArray.append(contentsOf: [.amusementAreas])
         rideAccessArray.append(contentsOf: [.allRides])
-          
+            
         case .senior:   areaAccessArray.append(contentsOf: [.amusementAreas])
-                        rideAccessArray.append(contentsOf: [.allRides, .skipAllRideLines])
-                        discountAccessArray.append(contentsOf: [.onFood(percentage: 10), .onMarchandise(percentage: 10)])
+        rideAccessArray.append(contentsOf: [.allRides, .skipAllRideLines])
+        discountAccessArray.append(contentsOf: [.onFood(percentage: 10), .onMarchandise(percentage: 10)])
         case .seassonPass: areaAccessArray.append(contentsOf: [.amusementAreas])
-                           rideAccessArray.append(contentsOf: [.allRides, .skipAllRideLines])
-                           discountAccessArray.append(contentsOf: [.onFood(percentage: 10), .onMarchandise(percentage: 20)])
+        rideAccessArray.append(contentsOf: [.allRides, .skipAllRideLines])
+        discountAccessArray.append(contentsOf: [.onFood(percentage: 10), .onMarchandise(percentage: 20)])
         }
         
         access = Access(areaAccess: areaAccessArray, rideAccess: rideAccessArray, discountAccess: discountAccessArray)
@@ -640,7 +674,7 @@ class Guest: Accessable, Swipeable {
         var message: String = ""
         if isBirthdayDay() {
             if let firstName = self.firstName {
-            message = "Happy birthday \(firstName)!!"
+                message = "Happy birthday \(firstName)!!"
             }
             else{
                 message = "Happy birthday!!"
@@ -648,46 +682,46 @@ class Guest: Accessable, Swipeable {
         }
         
         if let areaAccess = areaAccess{
-        
-        switch areaAccess {
-        case .amusementAreas: if let areaAccessArray = self.access.areaAccess{
-            if areaAccessArray.contains(AreaAccess.amusementAreas){
-                self.permission = .granted(description: "Access Granted !", message: message)
+            
+            switch areaAccess {
+            case .amusementAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.amusementAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+            case .kitchenAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.kitchenAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .maintenanceAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.maintenanceAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .officeAreas: if let areaAccessArray = self.access.areaAccess{
+                if areaAccessArray.contains(AreaAccess.officeAreas){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
+                
+            case .rideControlAreas: if let  areaAccessArray = self.access.areaAccess {
+                if areaAccessArray.contains(AreaAccess.rideControlAreas) {
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }}
+                
             }
-            }
-        case .kitchenAreas: if let areaAccessArray = self.access.areaAccess{
-            if areaAccessArray.contains(AreaAccess.kitchenAreas){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-
-        case .maintenanceAreas: if let areaAccessArray = self.access.areaAccess{
-            if areaAccessArray.contains(AreaAccess.maintenanceAreas){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-
-        case .officeAreas: if let areaAccessArray = self.access.areaAccess{
-            if areaAccessArray.contains(AreaAccess.officeAreas){
-                self.permission = .granted(description: "Access Granted !", message: message)
-            }
-            }
-
-        case .rideControlAreas: if let  areaAccessArray = self.access.areaAccess {
-                                    if areaAccessArray.contains(AreaAccess.rideControlAreas) {
-            self.permission = .granted(description: "Access Granted !", message: message)
-            }}
-
         }
-    }
         
         if let rideAccess = rideAccess {
             switch rideAccess {
             case .allRides: if let rideAccessArray = self.access.rideAccess {
-                                if rideAccessArray.contains(RideAccess.allRides){
-                                    self.permission = .granted(description: "Access Granted !", message: message)
-                                }
-                            }
+                if rideAccessArray.contains(RideAccess.allRides){
+                    self.permission = .granted(description: "Access Granted !", message: message)
+                }
+                }
             case .skipAllRideLines: if let rideAccessArray = self.access.rideAccess {
                 if rideAccessArray.contains(RideAccess.skipAllRideLines){
                     self.permission = .granted(description: "Access Granted !", message: message)
@@ -708,35 +742,35 @@ class Guest: Accessable, Swipeable {
                     self.permission = .granted(description: "Access Granted !", message: message)
                 }
                 }
-
+                
             case .onFood(percentage: 25): if let discountAccessArray = self.access.discountAccess{
                 if contains(foodDiscount: 25, merchDiscount: nil, discountAccessArray: discountAccessArray) {
                     self.permission = .granted(description: "Access Granted !", message: message)
                 }
                 }
-
+                
             case .onMarchandise(percentage: 20): if let discountAccessArray = self.access.discountAccess{
                 if contains(foodDiscount: nil, merchDiscount: 20, discountAccessArray: discountAccessArray) {
                     self.permission = .granted(description: "Access Granted !", message: message)
                 }
                 }
-
+                
             case .onMarchandise(percentage: 25): if let discountAccessArray = self.access.discountAccess{
                 if contains(foodDiscount: nil,  merchDiscount: 25, discountAccessArray: discountAccessArray) {
                     self.permission = .granted(description: "Access Granted !", message: message)
                 }
                 }
-
+                
             case .onMarchandise(percentage: 10): if let discountAccessArray = self.access.discountAccess{
                 if contains(foodDiscount: nil, merchDiscount: 10, discountAccessArray: discountAccessArray) {
                     self.permission = .granted(description: "Access Granted !", message: message)
                 }
                 }
             default: break
-              
+                
             }
         }
-}
+    }
     
     func isBirthdayDay() -> Bool{
         
@@ -745,9 +779,13 @@ class Guest: Accessable, Swipeable {
         let currentDay = calendar.component(.day, from: date)
         let currentMonth = calendar.component(.month, from: date)
         
-        if let dateOfBirth = self.dateOfBirth{
-            let birthdayDay = calendar.component(.day, from: dateOfBirth)
-            let birthdayMonth = calendar.component(.month, from: dateOfBirth)
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "dd-MM-yyyy"
+        
+        if let dateString = dateOfBirth {
+            let dateOfBirth = dateFormatterGet.date(from: dateString)
+            let birthdayDay = calendar.component(.day, from: dateOfBirth!)
+            let birthdayMonth = calendar.component(.month, from: dateOfBirth!)
             if currentDay == birthdayDay && currentMonth == birthdayMonth{
                 return true
             }
@@ -766,7 +804,7 @@ class Guest: Accessable, Swipeable {
     }
     
     // update counter for Timer
-     @objc func updateCounter() {
+    @objc func updateCounter() {
         if seconds < 1 { // if time out
             timer.invalidate()
             isTimerRunning = false
@@ -775,9 +813,9 @@ class Guest: Accessable, Swipeable {
             seconds -= 1
             print("Seconds \(seconds)")
         }
-       
+        
     }
-
+    
 }
 
 class Vendor: Accessable, Swipeable {
@@ -790,8 +828,8 @@ class Vendor: Accessable, Swipeable {
     let state: String?
     let zipCode: String?
     let socialSecurityNumber: String?
-    let dateOfBirth: Date?
-    let dateOfVisit: Date?
+    let dateOfBirth: String?
+    let dateOfVisit: String?
     let vendorCompany: String
     var permission: Permission
     
@@ -810,27 +848,40 @@ class Vendor: Accessable, Swipeable {
         permission = .denied(description: "Access Denied", message: "")
     }
     
-    init(firstName: String?, lastName: String?, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: Date?, dateOfVisit: Date?, vendorCompany: String ) throws {
+    init(firstName: String?, lastName: String?, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: String?, dateOfVisit: String?, vendorCompany: String ) throws {
         
-            if firstName == "" || firstName == nil {
-                throw EntrantDataError.missingName(description: "Name is required")
-            }
-            
-            if lastName == "" || lastName == nil {
-                throw EntrantDataError.missingLastName(description: "Lastname is required")
-            }
+        if firstName == "" || firstName == nil {
+            throw EntrantDataError.missingName(description: "Name is required")
+        }
         
-            if dateOfBirth == nil {
-                throw EntrantDataError.missingBirthday(description: "Date of birthday is required")
-            }
+        if lastName == "" || lastName == nil {
+            throw EntrantDataError.missingLastName(description: "Lastname is required")
+        }
         
-            if dateOfVisit == nil {
-                throw EntrantDataError.missingDateOfVisit(description: "Vendor date of visit is missing")
-            }
+        guard let dateOfBirth = dateOfBirth else {
+            throw EntrantDataError.missingBirthday(description: "Date of birthday is required")
+        }
         
-            if vendorCompany == "" {
-                throw EntrantDataError.missingVendorCompany(description: "Vendor company is missing")
-            }
+        guard let dateOfVisit = dateOfVisit else {
+            throw EntrantDataError.missingDateOfVisit(description: "Vendor date of visit is missing")
+        }
+        
+        if vendorCompany == "" {
+            throw EntrantDataError.missingVendorCompany(description: "Vendor company is missing")
+        }
+        
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "dd-MM-yyyy"
+        
+        if dateFormatterGet.date(from: dateOfBirth) == nil || dateFormatterGet.date(from: dateOfVisit) == nil {
+            throw EntrantDataError.dateFormatError(description: "Invalid date format")
+        }
+        
+        try inputValidation(firstName: firstName!, lastName: lastName!, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: socialSecurityNumber)
+        
+        if vendorCompany.characters.count > 20 {
+            throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
+        }
         
         self.firstName = firstName
         self.lastName = lastName
@@ -862,12 +913,18 @@ class Vendor: Accessable, Swipeable {
         access = Access(areaAccess: areaAccessArray, rideAccess: rideAccessArray, discountAccess: discountAccessArray)
         return self.access
         
-
+        
     }
     
     func swipe(areaAccess: AreaAccess?, rideAccess: RideAccess?, discountAccess: DiscountAccess?) {
         permission = .denied(description: "Access Denied", message: "")
-        let message = ""
+        var message = ""
+        
+        if isBirthdayDay(){
+            message = "Happy Birthday \(String(describing: self.firstName))!!"
+        }
+        
+        
         
         if let areaAccess = areaAccess{
             
@@ -954,11 +1011,37 @@ class Vendor: Accessable, Swipeable {
                     self.permission = .granted(description: "Access Granted !", message: message)
                 }
                 }
-                default: break
+            default: break
                 
             }
         }
     }
+    
+    func isBirthdayDay() -> Bool{
+        
+        let date = Date()
+        let calendar = Calendar.current
+        let currentDay = calendar.component(.day, from: date)
+        let currentMonth = calendar.component(.month, from: date)
+        
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "dd-MM-yyyy"
+        
+        if let dateString = dateOfBirth {
+            let dateOfBirth = dateFormatterGet.date(from: dateString)
+            let birthdayDay = calendar.component(.day, from: dateOfBirth!)
+            let birthdayMonth = calendar.component(.month, from: dateOfBirth!)
+            if currentDay == birthdayDay && currentMonth == birthdayMonth{
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        // otherwise
+        return false
+    }
+
 }
 
 // Protocols
@@ -1001,3 +1084,47 @@ extension Swipeable {
         return contains
     }
 }
+
+func inputValidation(firstName: String, lastName: String, streetAddress: String, city: String, state: String, zipCode: String, socialSecurityNumber: String?) throws{
+    
+    if firstName != ""{
+        if firstName.characters.count > 20 {
+            throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
+        }
+    }
+    if lastName != ""{
+        if lastName.characters.count > 20 {
+            throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
+        }
+    }
+    if streetAddress != "" {
+        if streetAddress.characters.count>20 {
+            throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
+        }
+    }
+    if city != "" {
+        if city.characters.count > 20  {
+            throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
+        }
+    }
+    if state != "" {
+        if state.characters.count > 20 {
+            throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
+        }
+    }
+    if zipCode != ""{
+        if zipCode.characters.count != 5{
+            throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
+        }
+    }
+    
+    if let socialSecurityNumber = socialSecurityNumber as String! {
+       if socialSecurityNumber != "" {
+        if socialSecurityNumber.characters.count != 11 {
+            throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
+        }
+    }
+    }
+    
+}
+

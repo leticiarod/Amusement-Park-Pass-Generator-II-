@@ -69,7 +69,7 @@ class ViewController: UIViewController  {
     var contractEmployee = ContractEmployee()
     var vendor = Vendor()
     var access = Access()
-    var firstName = "", lastName = "", SSN = "", date = Date(), streetAddress="", city = "", state = "", zipCode = "", vendorCompany = "", projectID = "", dateOfBirth: String = ""
+    var firstName = "", lastName = "", SSN = "", date = "", streetAddress="", city = "", state = "", zipCode = "", vendorCompany = "", projectID = "", dateOfBirth: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -143,18 +143,9 @@ class ViewController: UIViewController  {
         var index = 0
         var textField = UITextField()
         
-        // Convert date to string
-        let dateFormatter = DateFormatter()
-        //Your New Date format as per requirement change it own
-        dateFormatter.dateFormat = "dd-mm-yyyy"
-        if let d = entrantByType.dateOfBirth {
-            //pass Date here
-            dateOfBirth = dateFormatter.string(from: d)
-        }
-        
         // Date of Birth
         textField = textFieldCollection[index]
-        textField.text = dateOfBirth
+        textField.text = entrantByType.dateOfBirth
         if let d = entrantByType.dateOfBirth{
             date = d
         }
@@ -187,6 +178,7 @@ class ViewController: UIViewController  {
             lastName = ln
         }
         index += 1
+        
         // Company
          textField = textFieldCollection[index]
         textField.text = entrantByType.vendorCompany
@@ -281,17 +273,12 @@ class ViewController: UIViewController  {
                 cleanTextFields()
                 enableForm()
                 subEntrantTypeSelected = "General"
-        case 10: // Assistant option was tapped
-                print("asssistant")
-                cleanTextFields()
-                enableForm()
-                subEntrantTypeSelected = "Assistant"
-        case 11: // Contractor option was tapped
+         case 10: // Contractor option was tapped
                 print("contractor")
                 cleanTextFields()
                 enableForm()
                 subEntrantTypeSelected = "Contractor"
-        case 12: // Vendor option was tapped
+        case 11: // Vendor option was tapped
                 print("vendor")
                 cleanTextFields()
                 enableVendorForm()
@@ -404,8 +391,15 @@ class ViewController: UIViewController  {
         }
         
         for label in labelCollection{
-            if label.text != "SSN" && label.text != "Project #" && label.text != "Company" {
+            if subEntrantTypeSelected == "Contractor" {
+                if label.text != "Company" {
+                    label.textColor = textColorEnabledLabel
+                }
+            }
+            else {
+            if label.text != "Project #" && label.text != "Company" {
                 label.textColor = textColorEnabledLabel
+            }
             }
         }
         
@@ -427,9 +421,9 @@ class ViewController: UIViewController  {
         }
         
         for label in labelCollection{
-            if label.text != "SSN" && label.text != "Project #" {
+            if /*label.text != "SSN" &&*/ label.text != "Project #" {
                 label.textColor = textColorEnabledLabel
-            }
+           }
         }
         
         for uiview in uiViewCollection {
@@ -464,7 +458,9 @@ class ViewController: UIViewController  {
             access = guest.generateAccessByEntrantType()
             case "SeassonPass": try guest = Guest(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .seassonPass)
             access = guest.generateAccessByEntrantType()
-            case "Food": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .foodServices)
+            case "Food":
+                
+                try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .foodServices)
             access = hourlyEmployee.generateAccessByEntrantType()
             case "Ride": try hourlyEmployee = HourlyEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .rideServices)
             access = hourlyEmployee.generateAccessByEntrantType()
@@ -480,7 +476,7 @@ class ViewController: UIViewController  {
             case "Contractor": try contractEmployee = ContractEmployee(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, type: .nonType, projectID: projectID)
             access = contractEmployee.generateAccessByEntrantType()
             case "Vendor":
-                try vendor = Vendor(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, dateOfVisit: Date(), vendorCompany: vendorCompany)
+                try vendor = Vendor(firstName: firstName, lastName: lastName, streetAddress: streetAddress, city: city, state: state, zipCode: zipCode, socialSecurityNumber: SSN, dateOfBirth: date, dateOfVisit: "28-06-2017", vendorCompany: vendorCompany)
                 access = vendor.generateAccessByEntrantType()
             default: break
             }
@@ -504,8 +500,14 @@ class ViewController: UIViewController  {
             createAlert(with: "Zipcode is required")
         } catch EntrantDataError.overFiveYearsOldError(description: "Free child must be under 5 years old"){
             createAlert(with: "Free child must be under 5 years old")
-        }
-        catch {
+        } catch EntrantDataError.itemShouldBeNUmerical(description: "Zipcode must be a number"){
+            createAlert(with: "Zipcode must be a number")
+        } catch EntrantDataError.dateFormatError(description: "Invalid date format"){
+            createAlert(with: "Invalid date format")
+        } catch EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input"){
+            createAlert(with: "Inconrect length of input")
+        } catch   {
+            print("error \(error)")
             fatalError()
         }
         
