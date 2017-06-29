@@ -152,11 +152,11 @@
                                                                         <color key="textColor" red="0.2470588235" green="0.21176470589999999" blue="0.2784313725" alpha="1" colorSpace="calibratedRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="MM / DD / YYYY" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oy6-Yy-q6w">
+                                                                    <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="MM-DD-YYYY" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oy6-Yy-q6w">
                                                                         <rect key="frame" x="0.0" y="60" width="216" height="60"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                                     </textField>
                                                                 </subviews>
                                                             </stackView>
@@ -173,7 +173,7 @@
                                                                         <rect key="frame" x="0.0" y="60" width="216" height="60"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                                     </textField>
                                                                 </subviews>
                                                             </stackView>
@@ -190,7 +190,7 @@
                                                                         <rect key="frame" x="0.0" y="60" width="216" height="60"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                                     </textField>
                                                                 </subviews>
                                                             </stackView>
@@ -232,7 +232,7 @@
                                                                         <rect key="frame" x="0.0" y="60" width="339" height="60"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                                     </textField>
                                                                 </subviews>
                                                             </stackView>
@@ -249,7 +249,7 @@
                                                                         <rect key="frame" x="0.0" y="60" width="339" height="60"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                                     </textField>
                                                                 </subviews>
                                                             </stackView>
@@ -280,7 +280,7 @@
                                                                 <rect key="frame" x="0.0" y="60" width="708" height="60"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <textInputTraits key="textInputTraits"/>
+                                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                             </textField>
                                                         </subviews>
                                                     </stackView>
@@ -309,7 +309,7 @@
                                                                 <rect key="frame" x="0.0" y="60" width="708" height="60"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <textInputTraits key="textInputTraits"/>
+                                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                             </textField>
                                                         </subviews>
                                                     </stackView>
@@ -341,7 +341,7 @@
                                                                         <rect key="frame" x="0.0" y="60" width="216" height="60"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                                     </textField>
                                                                 </subviews>
                                                             </stackView>
@@ -358,7 +358,7 @@
                                                                         <rect key="frame" x="0.0" y="60" width="216" height="60"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                                     </textField>
                                                                 </subviews>
                                                             </stackView>
@@ -375,7 +375,7 @@
                                                                         <rect key="frame" x="0.0" y="60" width="216" height="60"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                                     </textField>
                                                                 </subviews>
                                                             </stackView>

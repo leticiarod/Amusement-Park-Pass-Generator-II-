@@ -132,27 +132,27 @@ extension Swipeable {
 func inputValidation(firstName: String, lastName: String, streetAddress: String, city: String, state: String, zipCode: String, socialSecurityNumber: String?) throws{
     
     if firstName != ""{
-        if firstName.characters.count > 20 {
+        if firstName.characters.count < 2 {
             throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
         }
     }
     if lastName != ""{
-        if lastName.characters.count > 20 {
+        if lastName.characters.count < 2 {
             throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
         }
     }
     if streetAddress != "" {
-        if streetAddress.characters.count>20 {
+        if streetAddress.characters.count < 2 {
             throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
         }
     }
     if city != "" {
-        if city.characters.count > 20  {
+        if city.characters.count < 2  {
             throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
         }
     }
     if state != "" {
-        if state.characters.count > 20 {
+        if state.characters.count < 2 {
             throw EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input")
         }
     }

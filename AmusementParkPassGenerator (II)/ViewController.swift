@@ -42,6 +42,7 @@ class ViewController: UIViewController  {
                 $0.layer.borderColor = borderColorDisabledTextField.cgColor
                 $0.layer.cornerRadius = 5
                 $0.backgroundColor = backgroundColorDisabledTextField
+                $0.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
             }
             
         }
@@ -149,38 +150,41 @@ class ViewController: UIViewController  {
         var index = 0
         var textField = UITextField()
         
+        generatePassButton.isEnabled = true
+        generatePassButton.setTitleColor(.white, for: .normal)
+        
         // Date of Birth
         textField = textFieldCollection[index]
         textField.text = entrantByType.dateOfBirth
-        if let d = entrantByType.dateOfBirth{
+        if let d = textField.text{
             date = d
         }
         index += 1
         // SSN
         textField = textFieldCollection[index]
         textField.text = entrantByType.socialSecurityNumber
-        if let ssn = entrantByType.socialSecurityNumber {
+        if let ssn = textField.text {
             SSN = ssn
         }
         index += 1
         // Project
         textField = textFieldCollection[index]
         textField.text = entrantByType.projectID
-        if let p = entrantByType.projectID {
+        if let p = textField.text {
             projectID = p
         }
         index += 1
         // First Name
         textField = textFieldCollection[index]
         textField.text = entrantByType.firstName
-        if let fn = entrantByType.firstName as String! {
+        if let fn = textField.text as String! {
             firstName = fn
         }
         index += 1
         // Last Name
         textField = textFieldCollection[index]
         textField.text = entrantByType.lastName
-        if let ln = entrantByType.lastName {
+        if let ln = textField.text {
             lastName = ln
         }
         index += 1
@@ -188,41 +192,58 @@ class ViewController: UIViewController  {
         // Company
         textField = textFieldCollection[index]
         textField.text = entrantByType.vendorCompany
-        if let c = entrantByType.vendorCompany {
+        if let c = textField.text {
             vendorCompany = c
         }
         index += 1
         // Street Address
         textField = textFieldCollection[index]
         textField.text = entrantByType.streetAddress
-        if let st = entrantByType.streetAddress {
+        if let st = textField.text {
             streetAddress = st
         }
         index += 1
         // City
         textField = textFieldCollection[index]
         textField.text = entrantByType.city
-        if let c = entrantByType.city {
+        if let c = textField.text {
             city = c
         }
         index += 1
         // State
         textField = textFieldCollection[index]
         textField.text = entrantByType.state
-        if let s = entrantByType.state {
+        if let s = textField.text {
             state = s
         }
         index += 1
         // Zip Code
         textField = textFieldCollection[index]
         textField.text = entrantByType.zipCode
-        if let zc = entrantByType.zipCode {
+        if let zc = textField.text {
             zipCode = zc
         }
         index += 1
         
-        createEntrantObjectByType()
-        
+    }
+    
+    // textFieldDidChange is triggered when a textfield is edited
+    func textFieldDidChange(textField: UITextField) {
+        generatePassButton.isEnabled = true
+        generatePassButton.setTitleColor(.white, for: .normal)
+        switch textField.tag {
+        case 1: date = textField.text!
+        case 2: SSN = textField.text!
+        case 3: projectID = textField.text!
+        case 4: firstName = textField.text!
+        case 5: lastName = textField.text!
+        case 6: vendorCompany = textField.text!
+        case 7: streetAddress = textField.text!
+        case 8: city = textField.text!
+        case 9: state = textField.text!
+        case 10: zipCode = textField.text!
+        default: break
+        }
     }
     
     // ButtonClicked is the targeted method, it is called when a button of the stack view menu is tapped.
@@ -300,6 +321,7 @@ class ViewController: UIViewController  {
             guard let createPassController = segue.destination as? CreatePassController else {
                 return
             }
+            createEntrantObjectByType()
             switch subEntrantTypeSelected {
             case "Child", "Classic", "SeniorGuest", "VIP", "SeassonPass":
                 createPassController.guest = self.guest
@@ -417,10 +439,15 @@ class ViewController: UIViewController  {
         for uiview in uiViewCollection {
             uiview.isUserInteractionEnabled = true
         }
+        
+        for textField in textFieldCollection{
+            if textField.tag == 2 || textField.tag == 3 || textField.tag == 6 {
+                textField.isEnabled = false
+            }
+        }
+        
         generatePassButton.setTitleColor(.white, for: .normal)
         populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
-        
-        // submenuStackView.isUserInteractionEnabled = false
     }
     
     // Enable Form (get rid of the grey parts) for a type of Entrant = Vendor
@@ -443,8 +470,6 @@ class ViewController: UIViewController  {
         }
         generatePassButton.setTitleColor(.white, for: .normal)
         populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
-        
-        //  submenuStackView.isUserInteractionEnabled = false
     }
     
     // Set empty string to the textfields in the form
@@ -452,6 +477,16 @@ class ViewController: UIViewController  {
         textFieldCollection.forEach{
             $0.text = ""
         }
+        date = "00.00.0000"
+        SSN = ""
+        projectID = ""
+        firstName = ""
+        lastName = ""
+        vendorCompany = ""
+        streetAddress = ""
+        city = ""
+        state = ""
+        zipCode = ""
     }
     
     // Create object an Entrant Object given the the subtype of entrant (Child, contractor, food services Employee) selected in the submenu
@@ -500,55 +535,55 @@ class ViewController: UIViewController  {
             //disable generatePassButton until populate data button be pressed again
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Name is required! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Name is required! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.missingLastName(description: "Lastname is required"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Lastname is required! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Lastname is required! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.missingBirthday(description: "Date of birthday is required") {
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Date of birthday required! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Date of birthday required! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.missingDateOfVisit(description: "Vendor date of visit is missing"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Vendor date of visit is missing! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Vendor date of visit is missing! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.missingVendorCompany(description: "Vendor company is missing"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Vendor company is missing! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Vendor company is missing! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.missingCity(description: "City is required") {
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "City is required! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "City is required! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.missingStreetAddress(description: "Street Address is required"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Street Address is required! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Street Address is required! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.missingState(description: "State is required"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "State is required! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "State is required! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.missingZipCode(description: "Zipcode is required"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Zipcode is required! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Zipcode is required! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.overFiveYearsOldError(description: "Free child must be under 5 years old"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Free child must be under 5 years old! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Free child must be under 5 years old! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.itemShouldBeNUmerical(description: "Zipcode must be a number"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Zipcode must be a number! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Zipcode must be a number! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.dateFormatError(description: "Invalid date format"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Invalid date format! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Invalid date format! You will not able to generate a new pass until you fix the problem.")
         } catch EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input"){
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
-            createAlert(with: "Inconrect length of input! you will not able to generate a new pass until you fix the problem :)")
+            createAlert(with: "Inconrect length of input! You will not able to generate a new pass until you fix the problem.")
         } catch   {
             print("error \(error)")
             fatalError()
@@ -562,5 +597,6 @@ class ViewController: UIViewController  {
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
+    
 }
 

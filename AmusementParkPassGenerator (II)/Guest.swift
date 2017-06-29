@@ -47,8 +47,6 @@ class Guest: Accessable, Swipeable {
     
     init(firstName: String, lastName: String, streetAddress:String, city:String, state: String, zipCode:String, socialSecurityNumber:String, dateOfBirth: String?, type: GuestType) throws {
         
-        
-        
         if type == GuestType.freeChild {
             guard let dateOfBirth = dateOfBirth else {
                 throw EntrantDataError.missingBirthday(description: "Date of birthday is required")
