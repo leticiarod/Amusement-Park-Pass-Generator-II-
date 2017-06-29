@@ -417,7 +417,7 @@ class ViewController: UIViewController  {
     // Enable Form (get rid of the grey parts) for all type of Entrant (Except Vendor)
     func enableForm(){
         for textField in textFieldCollection{
-            if textField.tag != 2 && textField.tag != 3 && textField.tag != 6 {
+            if textField.tag != 3 && textField.tag != 6 {
                 textField.backgroundColor = .white
                 textField.layer.borderColor = borderColorEnabledTextField.cgColor
             }
@@ -441,7 +441,7 @@ class ViewController: UIViewController  {
         }
         
         for textField in textFieldCollection{
-            if textField.tag == 2 || textField.tag == 3 || textField.tag == 6 {
+            if textField.tag == 3 || textField.tag == 6 {
                 textField.isEnabled = false
             }
         }
@@ -453,7 +453,7 @@ class ViewController: UIViewController  {
     // Enable Form (get rid of the grey parts) for a type of Entrant = Vendor
     func enableVendorForm(){
         for textField in textFieldCollection{
-            if textField.tag != 2 && textField.tag != 3 {
+            if  textField.tag != 3 {
                 textField.backgroundColor = .white
                 textField.layer.borderColor = borderColorEnabledTextField.cgColor
             }
@@ -468,6 +468,13 @@ class ViewController: UIViewController  {
         for uiview in uiViewCollection {
             uiview.isUserInteractionEnabled = true
         }
+        
+        for textField in textFieldCollection{
+            if  textField.tag == 6 {
+                textField.isEnabled = true
+            }
+        }
+        
         generatePassButton.setTitleColor(.white, for: .normal)
         populateDataButton.setTitleColor(titleColorEnabledButton, for: .normal)
     }
@@ -584,7 +591,11 @@ class ViewController: UIViewController  {
             generatePassButton.isEnabled = false
             generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
             createAlert(with: "Inconrect length of input! You will not able to generate a new pass until you fix the problem.")
-        } catch   {
+        } catch EntrantDataError.incorrectCompanyName(description: "Incorrect Company Name") {
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Inconrect Company Name! You will not able to generate a new pass until you fix the problem.")
+        } catch {
             print("error \(error)")
             fatalError()
         }

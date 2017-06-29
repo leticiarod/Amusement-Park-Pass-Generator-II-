@@ -60,6 +60,8 @@ class Vendor: Accessable, Swipeable {
             throw EntrantDataError.missingVendorCompany(description: "Vendor company is missing")
         }
         
+        try checkVendorCompany(company: vendorCompany)
+        
         let dateFormatterGet = DateFormatter()
         dateFormatterGet.dateFormat = "dd-MM-yyyy"
         
@@ -232,4 +234,18 @@ class Vendor: Accessable, Swipeable {
         return false
     }
     
+    
 }
+
+// MARK: - Helper Method
+
+func checkVendorCompany(company: String) throws{
+    switch company {
+    case "Acme": break
+    case "Orkin": break
+    case "Fedex": break
+    case "NW Electrical": break
+    default: throw EntrantDataError.incorrectCompanyName(description: "Incorrect Company Name")
+    }
+}
+

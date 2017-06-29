@@ -24,5 +24,6 @@ enum EntrantDataError: Error {
     case dateFormatError(description: String)
     case itemShouldBeNUmerical(description: String)
     case incorrectLengthOfString(description: String)
+    case incorrectCompanyName(description: String)
     
 }
