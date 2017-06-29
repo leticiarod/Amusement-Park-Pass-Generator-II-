@@ -84,6 +84,12 @@ class ViewController: UIViewController  {
         // Dispose of any resources that can be recreated.
     }
     
+    // Refresh the form data once a new pass is created.
+    override func viewWillAppear(_ animated: Bool) {
+        cleanTextFields()
+        disabledForm()
+    }
+    
     @IBAction func guestButtonPressed(_ sender: Any) {
         
         enableViewsInStackView(uiComponents.guestButtonsArray)
@@ -450,7 +456,8 @@ class ViewController: UIViewController  {
     
     // Create object an Entrant Object given the the subtype of entrant (Child, contractor, food services Employee) selected in the submenu
     func createEntrantObjectByType() {
-       // generatePassButton.isEnabled = true
+        generatePassButton.isEnabled = true
+        generatePassButton.setTitleColor(.white, for: .normal)
         do {
             
             switch subEntrantTypeSelected {
@@ -491,32 +498,57 @@ class ViewController: UIViewController  {
             }
         } catch EntrantDataError.missingName(description: "Name is required") {
             //disable generatePassButton until populate data button be pressed again
-            //generatePassButton.isEnabled = false
-            createAlert(with: "Name is required")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Name is required! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.missingLastName(description: "Lastname is required"){
-            createAlert(with: "Lastname is required")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Lastname is required! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.missingBirthday(description: "Date of birthday is required") {
-            createAlert(with: "Date of birthday required")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Date of birthday required! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.missingDateOfVisit(description: "Vendor date of visit is missing"){
-            createAlert(with: "Vendor date of visit is missing")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Vendor date of visit is missing! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.missingVendorCompany(description: "Vendor company is missing"){
-            createAlert(with: "Vendor company is missing")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Vendor company is missing! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.missingCity(description: "City is required") {
-            createAlert(with: "City is required")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "City is required! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.missingStreetAddress(description: "Street Address is required"){
-            createAlert(with: "Street Address is required")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Street Address is required! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.missingState(description: "State is required"){
-            createAlert(with: "State is required")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "State is required! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.missingZipCode(description: "Zipcode is required"){
-            createAlert(with: "Zipcode is required")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Zipcode is required! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.overFiveYearsOldError(description: "Free child must be under 5 years old"){
-            createAlert(with: "Free child must be under 5 years old")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Free child must be under 5 years old! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.itemShouldBeNUmerical(description: "Zipcode must be a number"){
-            createAlert(with: "Zipcode must be a number")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Zipcode must be a number! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.dateFormatError(description: "Invalid date format"){
-            createAlert(with: "Invalid date format")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Invalid date format! you will not able to generate a new pass until you fix the problem :)")
         } catch EntrantDataError.incorrectLengthOfString(description: "Incorrect length of input"){
-            createAlert(with: "Inconrect length of input")
+            generatePassButton.isEnabled = false
+            generatePassButton.setTitleColor(textColorDisabledLabel, for: .normal)
+            createAlert(with: "Inconrect length of input! you will not able to generate a new pass until you fix the problem :)")
         } catch   {
             print("error \(error)")
             fatalError()

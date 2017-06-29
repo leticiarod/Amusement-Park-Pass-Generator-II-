@@ -398,7 +398,6 @@ class CreatePassController: UIViewController {
         
         uiComponents.createInterfaceForCardPassLabels(areaAccessArray: areaAccessStringArray, rideAccessArray: rideAccessStringArray, discountAccessArray: discountAccessStringArray)
         addLabelToStackView(uiComponents.totalPrivilegesArray)
-        print("privilegios \(uiComponents.totalPrivilegesArray)")
             
         case "Contractor":
             if let firstName = contractEmployee.firstName as String!, let lastName = contractEmployee.lastName as String! {
